@@ -1,0 +1,69 @@
+{% extends "reparaciones/base.html" %}
+{% load static %}
+
+{% block title %}Dashboard de Reparaciones{% endblock %}
+
+{% block content %}
+
+<h1 class="page-title">Dashboard de Reparaciones</h1>
+
+<div style="text-align:center;">
+    <a href="{% url 'crear_reparacion' %}" class="create-btn">
+        + Crear nueva reparación
+    </a>
+</div>
+
+<div class="dashboard">
+    {% for reparacion in reparaciones %}
+        <div class="card">
+
+            {% if reparacion.imagen %}
+                <img src="{{ reparacion.imagen.url }}" alt="Imagen del equipo">
+            {% else %}
+                <img src="{% static 'reparaciones/no-image.png' %}" alt="Sin imagen">
+            {% endif %}
+
+            {% if reparacion.imagen2 %}
+                <img src="{{ reparacion.imagen2.url }}" alt="Segunda imagen">
+            {% endif %}
+
+            <h2>{{ reparacion.tipo_equipo }}</h2>
+
+            <p><strong>Cliente:</strong> {{ reparacion.nombre_cliente }}</p>
+            <p><strong>Teléfono:</strong> {{ reparacion.telefono }}</p>
+            <p><strong>Ubicación:</strong> {{ reparacion.ubicacion }}</p>
+
+            <p>
+                <strong>Estado:</strong>
+                {% if reparacion.estado == 'pendiente_presupuesto' %}
+                    <span class="estado badge pendiente_presupuesto">📋 Presupuestando</span>
+                {% elif reparacion.estado == 'pendiente_pago' %}
+                    <span class="estado badge pendiente_pago">💸 Esperando seña</span>
+                {% elif reparacion.estado == 'en_proceso' %}
+                    <span class="estado badge en_proceso">🪚 En reparación</span>
+                {% elif reparacion.estado == 'listo_para_entregar' %}
+                    <span class="estado badge listo_para_entregar">📦 Listo en taller</span>
+                {% elif reparacion.estado == 'entregado' %}
+                    <span class="estado badge entregado">📬 Recibido</span>
+                {% elif reparacion.estado == 'finalizado' %}
+                    <span class="estado badge finalizado">🤝 Pago final recibido</span>
+                {% endif %}
+            </p>
+
+            {% if reparacion.fecha_finalizacion %}
+                <p><strong>Fecha de finalización:</strong> {{ reparacion.fecha_finalizacion }}</p>
+            {% endif %}
+
+            {% if reparacion.comentario_admin %}
+                <p><strong>Comentario:</strong> {{ reparacion.comentario_admin }}</p>
+            {% endif %}
+
+            <p><strong>Descripción:</strong> {{ reparacion.descripcion }}</p>
+
+        </div>
+    {% empty %}
+        <p>No hay reparaciones registradas.</p>
+    {% endfor %}
+</div>
+
+{% endblock %}

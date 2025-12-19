@@ -1,0 +1,122 @@
+{% extends "reparaciones/base.html" %}
+{% load static %}
+
+{% block title %}Iniciar sesión{% endblock %}
+
+{% block header_title %}
+Iniciar sesión
+{% endblock %}
+
+{% block content %}
+<div class="form-container login-card">
+
+    <h2>Ingresar</h2>
+
+    {% if form.errors %}
+        <div class="error-message">
+            Usuario o contraseña incorrectos
+        </div>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+
+        <label for="id_username">Usuario</label>
+        <input type="text" name="username" id="id_username" required autofocus>
+
+        <label for="id_password">Contraseña</label>
+        <input type="password" name="password" id="id_password" required>
+
+        <div class="remember-me">
+            <input type="checkbox" name="remember_me" id="id_remember_me">
+            <label for="id_remember_me">Recordarme</label>
+        </div>
+
+        <button type="submit">Entrar</button>
+    </form>
+
+    <p class="auth-link">
+        ¿No tenés cuenta?
+        <a href="{% url 'registrar' %}">Registrarse</a>
+    </p>
+
+</div>
+
+<style>
+    .login-card {
+        max-width: 360px;
+        margin: 40px auto;
+        padding: 25px;
+        background-color: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        color: #000;
+    }
+
+    .login-card h2 {
+        font-family: 'Manrope', sans-serif;
+        text-align: center;
+        margin-bottom: 20px;
+        color: #000;
+    }
+
+    input[type="text"], input[type="password"] {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        margin-bottom: 15px;
+        border-radius: 6px;
+        border: 1px solid #000;
+        font-size: 0.95rem;
+    }
+
+    button {
+        width: 100%;
+        padding: 10px;
+        background-color: #000;
+        color: #fff;
+        font-weight: bold;
+        border: 2px solid #000;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #222;
+        border-color: #222;
+    }
+
+    .remember-me {
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .error-message {
+        color: #FF6B6B;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+
+    .auth-link {
+        text-align: center;
+        margin-top: 15px;
+    }
+
+    .auth-link a {
+        color: #5988FF;
+        text-decoration: none;
+    }
+
+    .auth-link a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="form-actions">
+    <button type="submit" class="btn-taller">
+        Crear Cuenta
+    </button>
+</div>
+{% endblock %}

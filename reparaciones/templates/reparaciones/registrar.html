@@ -1,0 +1,17 @@
+{% extends "reparaciones/base.html" %}
+
+{% block title %}Registro{% endblock %}
+
+{% block header_title %}
+Taller de Tablas
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Crear cuenta</button>
+    </form>
+</div>
+{% endblock %}

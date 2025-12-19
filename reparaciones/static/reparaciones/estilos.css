@@ -1,0 +1,256 @@
+/* ========================
+   RESET + BASE
+======================== */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Manrope', sans-serif;
+    background-color: #0B1C2D;
+    color: #000;
+}
+
+/* ========================
+   HEADER
+======================== */
+.main-header {
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px 20px;
+}
+
+.title-badge {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #000; /* fondo negro */
+    border-radius: 12px;    /* bordes redondeados */
+    color: #fff;
+    font-family: 'Rubik Dirt', cursive; /* fuente Dirt */
+    text-align: center;
+    margin: 20px auto;
+}
+
+.logo-icon {
+    width: 40px;
+    height: 40px;
+    vertical-align: middle;
+    margin-left: 10px;
+}
+
+.page-title {
+    text-align: center;
+    margin: 30px 0 10px;
+    font-size: 2rem;
+}
+/* ========================
+   MAIN
+======================== */
+.main-content {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+/* ========================
+   CARDS / FORM / DASHBOARD
+======================== */
+.card,
+.form-container {
+    background-color: #FFFFFF;
+    border: 4px solid #000;
+    border-radius: 10px;
+    padding: 18px 20px;
+    max-width: 900px;
+    width: 100%;
+}
+
+/* ========================
+   DASHBOARD GRID
+======================== */
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+/* ========================
+   CARD CONTENT
+======================== */
+.card img {
+    width: 100%;
+    max-height: 180px;
+    object-fit: cover;
+    border: 4px solid #000;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
+.card h2 {
+    font-size: 1.1rem;
+    margin: 6px 0;
+}
+
+.card p {
+    margin: 4px 0;
+    font-size: 0.9rem;
+    line-height: 1.25;
+}
+
+/* ========================
+   ESTADO
+======================== */
+.estado {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 8px;
+    color: #0a0a0a;
+    font-weight: bold;
+}
+
+.estado.pendiente_presupuesto { background-color: #ed961d; } /* naranja */
+.estado.pendiente_pago { background-color: #ed961d; } /* naranja */
+.estado.en_proceso { background-color: #2ecd46; } /* verde */
+.estado.listo_para_entregar { background-color: #2ecd46; } /* verde */
+.estado.entregado { background-color: #bf44c8; } /* pink */
+.estado.finalizado { background-color: #060607; } /* negro oscuro */
+
+/* ========================
+   BOTONES
+======================== */
+.create-btn {
+    display: inline-block;
+    margin: 20px auto;
+    padding: 12px 24px;
+    background-color: #000;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 10px;
+    text-decoration: none;
+    border: 3px solid #000;
+    transition: all 0.2s ease;
+}
+
+.create-btn:hover {
+    background-color: #222;
+    border-color: #222;
+}
+/* ========================
+   FORM
+======================== */
+label {
+    font-weight: 600;
+    margin-top: 10px;
+    display: block;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 8px;
+    border: 2px solid #000;
+    border-radius: 4px;
+    margin-top: 4px;
+    font-family: 'Manrope', sans-serif;
+}
+
+/* ========================
+   HEADER + INSTAGRAM
+======================== */
+
+.main-header {
+    padding: 25px 20px 15px;
+    display: flex;
+    justify-content: center;
+}
+
+.header-inner {
+    width: 100%;
+    max-width: 1200px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* botón instagram */
+.ig-contact {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #000;
+    color: #f3f1f1;
+    padding: 8px 14px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.ig-contact img {
+    width: 18px;
+    height: 18px;
+}
+
+.ig-contact:hover {
+    background-color: #f8f5f5;
+}
+
+/* ========================
+   BOTONES MARCA TALLER
+======================== */
+.btn-taller {
+    appearance: none;
+    border: none;
+    cursor: pointer;
+
+    background: #000;
+    color: #fff;
+
+    font-family: 'Permanent Marker', cursive;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+
+    padding: 14px 28px;
+    border-radius: 16px;
+
+    position: relative;
+    box-shadow:
+        0 5px 0 #000,
+        inset 0 -3px 0 rgba(255,255,255,0.15);
+
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* textura irregular */
+.btn-taller::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    background: repeating-linear-gradient(
+        -2deg,
+        rgba(255,255,255,0.06),
+        rgba(255,255,255,0.06) 4px,
+        rgba(0,0,0,0.06) 8px
+    );
+    pointer-events: none;
+}
+
+/* hover artesanal */
+.btn-taller:hover {
+    transform: translateY(2px) rotate(-0.5deg);
+    box-shadow:
+        0 3px 0 #000,
+        inset 0 -2px 0 rgba(255,255,255,0.15);
+}
+
+/* centrado cómodo en forms */
+.form-actions {
+    margin-top: 20px;
+    text-align: center;
+}

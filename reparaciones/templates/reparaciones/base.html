@@ -1,0 +1,174 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Taller de Tablas{% endblock %}</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Rubik+Dirt&family=Permanent+Marker&display=swap" rel="stylesheet">
+
+    <!-- CSS propio -->
+    <link rel="stylesheet" href="{% static 'reparaciones/estilos.css' %}">
+
+    <style>
+        /* ---------- BASE GLOBAL ---------- */
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: #7dbbd7;
+            min-height: 100vh;
+        }
+
+        /* ---------- HEADER ---------- */
+        .main-header {
+            padding: 30px 20px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .header-inner {
+            width: 100%;
+            max-width: 1200px;
+            position: relative;
+            height: 120px;
+        }
+
+
+        /* ---------- MARCA ---------- */
+        .brand-wrapper {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+    }
+
+
+        /* BOTÓN PRINCIPAL */
+        .titulo-marca {
+            font-family: 'Rubik Dirt', cursive;
+            background-color: #000;
+            color: #fff;
+            padding: 16px 40px;
+            border-radius: 18px;
+            font-size: 2.6rem;
+            letter-spacing: 2px;
+            display: inline-block;
+            box-shadow: 0 6px 0 rgba(0,0,0,0.25);
+        }
+
+        /* CONTENEDOR PATAGONIA */
+        .sub-marca-wrapper {
+            position: relative;
+            margin-top: -4px;
+            margin-left: 220px; /* corre a la derecha bajo “TABLAS” */
+            display: inline-block;
+            box-shadow: 0 10px 3px rgba(0,0,0,0.25);
+        }
+
+        /* BASE RÚSTICA */
+        .marker-base {
+            position: absolute;
+            inset: -6px -10px;
+            background: #dadfdf;
+            border-radius: 14px;
+            transform: rotate(-2.5deg);
+            z-index: 0;
+            filter: url(#roughen);
+        }
+
+        .marker-base::after {
+            content: "";
+            position: absolute;
+            inset: -4px;
+            background:
+                radial-gradient(circle at 20% 40%, rgba(255,255,255,0.15) 0 6px, transparent 7px),
+                radial-gradient(circle at 70% 60%, rgba(255,255,255,0.12) 0 5px, transparent 6px),
+                radial-gradient(circle at 40% 80%, rgba(0,0,0,0.2) 0 7px, transparent 8px);
+            mix-blend-mode: overlay;
+        }
+
+
+        .sub-marca {
+            position: relative;
+            z-index: 1;
+            font-family: 'Permanent Marker', cursive;
+            color: #010101;
+            font-size: 1.4rem;
+            padding: 6px 18px;
+            letter-spacing: 2px;
+            white-space: nowrap;
+        }
+
+        /* ---------- INSTAGRAM ---------- */
+        .ig-contact {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+            font-family: 'Manrope', sans-serif;
+        }
+
+        .ig-contact img {
+            width: 24px;
+            height: 24px;
+        }
+
+        .ig-contact:hover {
+            background-color: #050505;
+        }
+
+        /* ---------- CONTENIDO ---------- */
+        .main-content {
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .content-wrapper {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<header class="main-header">
+    <div class="header-inner">
+
+        <div class="brand-wrapper">
+
+            <div class="titulo-marca">
+                TALLER DE TABLAS
+            </div>
+
+            <div class="sub-marca-wrapper">
+                <div class="marker-base"></div>
+                <div class="sub-marca">
+                    PATAGONIA
+                </div>
+            </div>
+
+        </div>
+
+        <a
+            href="https://www.instagram.com/tallerdtablas"
+            target="_blank"
+            class="ig-contact"
+        >
+            <img src="{% static 'reparaciones/ig-icon.svg' %}" alt="Instagram">
+            Contacto
+        </a>
+
+    </div>
+</header>
+
+<main class="main-content">
+    <div class="content-wrapper">
+        {% block content %}{% endblock %}
+    </div>
+</main>
+
+</body>
+</html>
