@@ -43,6 +43,9 @@
         <label for="id_video">Video (opcional)</label>
         <input type="file" name="video" id="id_video" accept="video/mp4,video/quicktime,video/webm">
         <small>Recomendado: 30–60 segundos. Máx. 150MB.</small>
+        {% if form.video.errors %}
+            <div style="color:red;">{{ form.video.errors }}</div>
+        {% endif %} 
 
 
         <label for="id_comentario">Comentario / Duda (opcional)</label>
