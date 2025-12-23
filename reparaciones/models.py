@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import FileExtensionValidator
+
 
 ESTADOS = [
     ('pendiente_presupuesto', 'Estamos presupuestando el pedido'),
@@ -30,6 +32,12 @@ class Reparacion(models.Model):
     descripcion = models.TextField()
     imagen = models.ImageField(upload_to='reparaciones/')
     imagen2 = models.ImageField(upload_to='reparaciones/', blank=True, null=True)
+    video = models.FileField(
+    upload_to="reparaciones/videos/",
+    blank=True,
+    null=True,
+    validators=[FileExtensionValidator(["mov", "mp4", "webm"])],
+)
     estado = models.CharField(
         max_length=50,
         choices=ESTADOS,

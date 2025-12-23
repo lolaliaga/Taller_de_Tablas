@@ -27,6 +27,10 @@
                 <img src="{{ reparacion.imagen2.url }}" alt="Segunda imagen">
             {% endif %}
 
+            {% if reparacion.video %}
+            <div class="badge badge-video">Video recibido</div>
+            {% endif %}
+
             <h2>{{ reparacion.tipo_equipo }}</h2>
 
             <p><strong>Cliente:</strong> {{ reparacion.nombre_cliente }}</p>

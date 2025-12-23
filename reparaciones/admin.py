@@ -3,15 +3,19 @@ from .models import Reparacion
 
 @admin.register(Reparacion)
 class ReparacionAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nombre_cliente', 'telefono', 'ubicacion', 'tipo_equipo', 'estado', 'fecha_finalizacion', 'usuario')
+    list_display = ('id', 'nombre_cliente', 'telefono', 'ubicacion', 'tipo_equipo', 'estado', 'fecha_finalizacion', 'usuario', 'tiene_video')
     list_filter = ('estado', 'tipo_equipo', 'usuario')
     search_fields = ('nombre_cliente', 'telefono', 'ubicacion', 'tipo_equipo')
     ordering = ('-id',)
     readonly_fields = ('usuario',)  # El usuario que creó la reparación no se puede modificar desde el admin
+    def tiene_video(self, obj):
+        return bool(obj.video)
+    tiene_video.boolean = True
+    tiene_video.short_description = "Video"
 
     fieldsets = (
         (None, {
-            'fields': ('usuario', 'nombre_cliente', 'telefono', 'ubicacion', 'tipo_equipo', 'descripcion', 'imagen', 'estado', 'fecha_finalizacion')
+            'fields': ('usuario', 'nombre_cliente', 'telefono', 'ubicacion', 'tipo_equipo', 'descripcion', 'imagen', 'estado', 'fecha_finalizacion', 'tiene_video')
         }),
     )
 
@@ -48,3 +52,6 @@ class ReparacionAdmin(admin.ModelAdmin):
     def marcar_finalizado(self, request, queryset):
         queryset.update(estado='finalizado')
     marcar_finalizado.short_description = "Marcar como: Recibimos el pago final"
+
+
+    
