@@ -104,11 +104,12 @@ USE_TZ = True
 # --------------------------------------------------
 # STATIC FILES
 # --------------------------------------------------
-STATIC_URL = '/static/'
+STATIC_URL = "/static/"
 
-STATICFILES_DIRS = [
-    BASE_DIR / 'static',
-]
+# Carpeta destino de collectstatic (obligatorio para Render)
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+
 
 # --------------------------------------------------
 # MEDIA FILES (imagenes)
