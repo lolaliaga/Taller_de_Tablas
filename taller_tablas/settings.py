@@ -15,11 +15,27 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # --------------------------------------------------
 # SECURITY
 # --------------------------------------------------
-SECRET_KEY = 'django-insecure-^f6^twab)2#yc^8b@7xvg5*76xc-(kj6i6e_(yj9p@jy$5#fmu'
+# --------------------------------------------------
+# ENV CONFIG (Render / Prod)
+# --------------------------------------------------
+def env_csv(name: str, default: str = ""):
+    return [v.strip() for v in os.environ.get(name, default).split(",") if v.strip()]
 
-DEBUG = True
+# Si no hay variable en local, usa el valor hardcodeado que ya tenías como fallback.
+# Si preferís, podés poner un fallback tipo "dev-insecure" (no recomendado).
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", SECRET_KEY)
 
-ALLOWED_HOSTS = []
+DEBUG = os.environ.get("DJANGO_DEBUG", "False").lower() in ("1", "true", "yes", "on")
+
+ALLOWED_HOSTS = env_csv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost")
+
+# Para evitar errores de CSRF cuando estás en HTTPS (Render)
+CSRF_TRUSTED_ORIGINS = env_csv("DJANGO_CSRF_TRUSTED_ORIGINS", "")
+
+# Render corre detrás de un proxy HTTPS
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+USE_X_FORWARDED_HOST = True
+
 
 # --------------------------------------------------
 # APPLICATIONS
@@ -108,7 +124,6 @@ STATIC_URL = "/static/"
 
 # Carpeta destino de collectstatic (obligatorio para Render)
 STATIC_ROOT = BASE_DIR / "staticfiles"
-
 
 
 # --------------------------------------------------
