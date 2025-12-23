@@ -54,6 +54,22 @@ class ReparacionForm(forms.ModelForm):
         label="Segunda imagen (opcional)"
     )
 
+    MAX_VIDEO_MB = 150
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["imagen"].required = True
+        self.fields["video"].required = False
+
+    def clean_video(self):
+        video = self.cleaned_data.get("video")
+        if not video:
+            return video
+        if video.size > MAX_VIDEO_MB * 1024 * 1024:
+            raise forms.ValidationError(f"El video supera el máximo permitido ({MAX_VIDEO_MB}MB).")
+        return video
+
+
     ubicacion = forms.ChoiceField(choices=UBICACION_CHOICES)
     tipo_equipo = forms.ChoiceField(choices=TIPO_EQUIPO_CHOICES)
 
@@ -74,6 +90,7 @@ class ReparacionForm(forms.ModelForm):
             'descripcion',
             'imagen',
             'imagen2',
+            'video',
             'orden_usuario',
         ]
 
