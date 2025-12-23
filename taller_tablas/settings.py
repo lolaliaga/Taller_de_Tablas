@@ -21,21 +21,26 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 def env_csv(name: str, default: str = ""):
     return [v.strip() for v in os.environ.get(name, default).split(",") if v.strip()]
 
-# Si no hay variable en local, usa el valor hardcodeado que ya tenías como fallback.
-# Si preferís, podés poner un fallback tipo "dev-insecure" (no recomendado).
-SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", SECRET_KEY)
+# --- SECRET KEY ---
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
+if not SECRET_KEY:
+    # Para local: permite correr sin variable (NO recomendado para producción)
+    SECRET_KEY = "dev-insecure-change-me"
+    # Si querés obligarlo siempre, reemplazá las 2 líneas de arriba por:
+    # raise ImproperlyConfigured("DJANGO_SECRET_KEY is required")
 
+# --- DEBUG ---
 DEBUG = os.environ.get("DJANGO_DEBUG", "False").lower() in ("1", "true", "yes", "on")
 
+# --- HOSTS ---
 ALLOWED_HOSTS = env_csv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost")
 
-# Para evitar errores de CSRF cuando estás en HTTPS (Render)
+# --- CSRF (para HTTPS en Render) ---
 CSRF_TRUSTED_ORIGINS = env_csv("DJANGO_CSRF_TRUSTED_ORIGINS", "")
 
-# Render corre detrás de un proxy HTTPS
+# Render corre detrás de proxy HTTPS
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 USE_X_FORWARDED_HOST = True
-
 
 # --------------------------------------------------
 # APPLICATIONS
