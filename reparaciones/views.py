@@ -6,6 +6,8 @@ from django.urls import NoReverseMatch
 from .forms import RegistroForm, ReparacionForm
 from .models import Reparacion
 from django.contrib.auth.views import LoginView
+import logging
+logger = logging.getLogger(__name__)
 
 # -----------------------------
 # Registro de usuario
@@ -14,7 +16,14 @@ def registrar(request):
     if request.method == "POST":
         form = RegistroForm(request.POST)
         if form.is_valid():
-            user = form.save()
+            if form.is_valid():
+                try:
+                    reparacion = form.save(commit=False)
+                    reparacion.usuario = request.user
+                    reparacion.save()
+                except Exception:
+                    logger.exception("Error al guardar reparación")
+                    raise
 
             # Asegura autenticación correcta (evita errores de backend)
             raw_password = form.cleaned_data.get("password1")

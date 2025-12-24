@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .models import Reparacion
+from django.core.exceptions import ValidationError
 
 # =============================
 # Formulario de registro
@@ -65,10 +66,21 @@ class ReparacionForm(forms.ModelForm):
         video = self.cleaned_data.get("video")
         if not video:
             return video
-        if video.size > MAX_VIDEO_MB * 1024 * 1024:
-            raise forms.ValidationError(f"El video supera el máximo permitido ({MAX_VIDEO_MB}MB).")
-        return video
+        
 
+        size = getattr(video, "size", 0) or 0
+        max_bytes = MAX_VIDEO_MB * 1024 * 1024  # ✅ MB reales
+
+        if size > max_bytes:
+            raise ValidationError(f"El video supera {MAX_VIDEO_MB}MB.")
+
+        # opcional: validar tipo MIME si querés
+        allowed = {"video/mp4", "video/quicktime", "video/webm"}
+        content_type = getattr(video, "content_type", "")
+        if content_type and content_type not in allowed:
+            raise ValidationError("Formato de video no soportado. Usá MP4, MOV o WEBM.")
+
+        return video
 
     ubicacion = forms.ChoiceField(choices=UBICACION_CHOICES)
     tipo_equipo = forms.ChoiceField(choices=TIPO_EQUIPO_CHOICES)
