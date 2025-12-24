@@ -5,15 +5,18 @@ from django.conf.urls.static import static
 from reparaciones.views import CustomLoginView
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path("admin/", admin.site.urls),
 
-    # Login/logout usando nuestra vista personalizada
-    path('accounts/login/', CustomLoginView.as_view(), name='login'),
+    # Login custom
+    path("accounts/login/", CustomLoginView.as_view(), name="login"),
+
+    # Logout + resto auth (logout, password reset, etc.)
     path("accounts/", include("django.contrib.auth.urls")),
 
-    # URLs de la app reparaciones
-    path('', include('reparaciones.urls')),
+    # App principal
+    path("", include("reparaciones.urls")),
 ]
 
-if settings.DEBUG or not settings.R2_PUBLIC_HOST:
+# OJO: si usás esa condición con R2_PUBLIC_HOST, hacelo seguro:
+if settings.DEBUG or not getattr(settings, "R2_PUBLIC_HOST", ""):
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

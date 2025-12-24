@@ -59,11 +59,19 @@ class ReparacionForm(forms.ModelForm):
         video = self.cleaned_data.get("video")
         if not video:
             return video
-        if video.size > self.MAX_VIDEO_MB * 1024 * 1024:
+
+        size_bytes = getattr(video, "size", 0) or 0
+        size_mb = size_bytes / (1024 * 1024)
+        max_bytes = self.MAX_VIDEO_MB * 1024 * 1024  # 150MB reales
+
+        if size_bytes > max_bytes:
             raise forms.ValidationError(
-                f"El video supera el máximo permitido ({self.MAX_VIDEO_MB}MB)."
+                f"El video pesa {size_mb:.1f}MB y supera el máximo permitido ({self.MAX_VIDEO_MB}MB)."
             )
+
         return video
+
+
 
     ubicacion = forms.ChoiceField(choices=UBICACION_CHOICES)
     tipo_equipo = forms.ChoiceField(choices=TIPO_EQUIPO_CHOICES)

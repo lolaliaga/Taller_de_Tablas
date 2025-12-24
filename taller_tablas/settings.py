@@ -128,9 +128,18 @@ USE_TZ = True
 # STATIC FILES
 # --------------------------------------------------
 STATIC_URL = "/static/"
-
-# Carpeta destino de collectstatic (obligatorio para Render)
 STATIC_ROOT = BASE_DIR / "staticfiles"
+
+STORAGES = globals().get("STORAGES", {})
+
+if DEBUG:
+    STORAGES["staticfiles"] = {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    }
+else:
+    STORAGES["staticfiles"] = {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    }
 
 # --------------------------------------------------
 # MEDIA FILES (imagenes)
@@ -188,3 +197,6 @@ LOGOUT_REDIRECT_URL = '/accounts/login/'
 # DEFAULT
 # --------------------------------------------------
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#Opcional solo como “parche” para collectstatic
+WHITENOISE_MANIFEST_STRICT = False

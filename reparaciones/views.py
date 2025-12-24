@@ -7,6 +7,7 @@ from .forms import RegistroForm, ReparacionForm
 from .models import Reparacion
 from django.contrib.auth.views import LoginView
 import logging
+
 logger = logging.getLogger(__name__)
 
 # -----------------------------
@@ -64,17 +65,26 @@ def crear_reparacion(request):
 # -----------------------------
 # Dashboard de usuario
 # -----------------------------
-@login_required
-def inicio(request):
-    reparaciones = Reparacion.objects.filter(
-        usuario=request.user
-    ).order_by('orden_usuario', '-created_at')
 
-    return render(
-        request,
-        'reparaciones/inicio.html',
-        {'reparaciones': reparaciones}
-    )
+@login_required
+def crear_reparacion(request):
+    if request.method == 'POST':
+        form = ReparacionForm(request.POST, request.FILES, user=request.user)
+        if form.is_valid():
+            try:
+                reparacion = form.save(commit=False)
+                reparacion.usuario = request.user
+                reparacion.save()
+                return redirect('inicio')
+            except Exception as e:
+                # En vez de 500, lo mostramos en el formulario
+                logger.exception("Error guardando reparación")
+                form.add_error(None, f"Error al guardar/subir archivos: {type(e).__name__}: {e}")
+        # si no es válido, cae y re-renderiza con errores
+    else:
+        form = ReparacionForm(user=request.user)
+
+    return render(request, 'reparaciones/crear_reparacion.html', {'form': form})
 
 
 # -----------------------------
