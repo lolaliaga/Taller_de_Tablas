@@ -2,12 +2,12 @@
 
 {% block title %}Registro{% endblock %}
 
-{% block header_title %}
-Taller de Tablas
-{% endblock %}
-
 {% block content %}
-<div class="form-container">
+<div class="form-container form-card">
+    <a class="back-link" href="{% url 'inicio' %}" onclick="if (window.history.length > 1) { history.back(); return false; }">Volver atrás</a>
+
+    <h2>Crear cuenta</h2>
+
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
