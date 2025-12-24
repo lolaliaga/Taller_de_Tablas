@@ -55,31 +55,14 @@ class ReparacionForm(forms.ModelForm):
         label="Segunda imagen (opcional)"
     )
 
-    MAX_VIDEO_MB = 150
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields["imagen"].required = True
-        self.fields["video"].required = False
-
     def clean_video(self):
         video = self.cleaned_data.get("video")
         if not video:
             return video
-        
-
-        size = getattr(video, "size", 0) or 0
-        max_bytes = MAX_VIDEO_MB * 1024 * 1024  # ✅ MB reales
-
-        if size > max_bytes:
-            raise ValidationError(f"El video supera {MAX_VIDEO_MB}MB.")
-
-        # opcional: validar tipo MIME si querés
-        allowed = {"video/mp4", "video/quicktime", "video/webm"}
-        content_type = getattr(video, "content_type", "")
-        if content_type and content_type not in allowed:
-            raise ValidationError("Formato de video no soportado. Usá MP4, MOV o WEBM.")
-
+        if video.size > self.MAX_VIDEO_MB * 1024 * 1024:
+            raise forms.ValidationError(
+                f"El video supera el máximo permitido ({self.MAX_VIDEO_MB}MB)."
+            )
         return video
 
     ubicacion = forms.ChoiceField(choices=UBICACION_CHOICES)
@@ -109,6 +92,8 @@ class ReparacionForm(forms.ModelForm):
     # =============================
     # Lógica del formulario
     # =============================
+    MAX_VIDEO_MB = 150
+
     def __init__(self, *args, **kwargs):
         """
         user se pasa desde la view para:
@@ -117,6 +102,8 @@ class ReparacionForm(forms.ModelForm):
         """
         self.user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
+        self.fields["imagen"].required = True
+        self.fields["video"].required = False
 
         # Si es creación nueva
         if not self.instance.pk and self.user:
