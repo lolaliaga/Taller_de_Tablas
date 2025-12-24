@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import login
+from django.contrib.auth import login, authenticate
+from django.urls import NoReverseMatch
+
 from .forms import RegistroForm, ReparacionForm
 from .models import Reparacion
 from django.contrib.auth.views import LoginView
@@ -9,15 +11,27 @@ from django.contrib.auth.views import LoginView
 # Registro de usuario
 # -----------------------------
 def registrar(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = RegistroForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)
-            return redirect('inicio')
+
+            # Asegura autenticación correcta (evita errores de backend)
+            raw_password = form.cleaned_data.get("password1")
+            authed_user = authenticate(
+                request, username=user.username, password=raw_password
+            )
+            login(request, authed_user or user)
+
+            # Evita 500 si la URL name 'inicio' no existe
+            try:
+                return redirect("inicio")
+            except NoReverseMatch:
+                return redirect("/")
     else:
         form = RegistroForm()
-    return render(request, 'reparaciones/registrar.html', {'form': form})
+
+    return render(request, "reparaciones/registrar.html", {"form": form})
 
 
 # -----------------------------

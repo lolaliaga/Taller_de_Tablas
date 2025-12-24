@@ -9,8 +9,7 @@ urlpatterns = [
 
     # Login/logout usando nuestra vista personalizada
     path('accounts/login/', CustomLoginView.as_view(), name='login'),
-    path('accounts/logout/', 
-         include('django.contrib.auth.urls')),  # logout y demás
+    path("accounts/", include("django.contrib.auth.urls")),
 
     # URLs de la app reparaciones
     path('', include('reparaciones.urls')),
