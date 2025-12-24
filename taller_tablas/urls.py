@@ -16,5 +16,5 @@ urlpatterns = [
     path('', include('reparaciones.urls')),
 ]
 
-if settings.DEBUG:
+if settings.DEBUG or not settings.R2_PUBLIC_HOST:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
