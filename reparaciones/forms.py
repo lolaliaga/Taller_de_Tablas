@@ -54,19 +54,14 @@ class ReparacionForm(forms.ModelForm):
         label="Segunda imagen (opcional)"
     )
 
-    MAX_VIDEO_MB = 150
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields["imagen"].required = True
-        self.fields["video"].required = False
-
     def clean_video(self):
         video = self.cleaned_data.get("video")
         if not video:
             return video
-        if video.size > MAX_VIDEO_MB * 1024 * 1024:
-            raise forms.ValidationError(f"El video supera el máximo permitido ({MAX_VIDEO_MB}MB).")
+        if video.size > self.MAX_VIDEO_MB * 1024 * 1024:
+            raise forms.ValidationError(
+                f"El video supera el máximo permitido ({self.MAX_VIDEO_MB}MB)."
+            )
         return video
 
 
@@ -97,6 +92,8 @@ class ReparacionForm(forms.ModelForm):
     # =============================
     # Lógica del formulario
     # =============================
+    MAX_VIDEO_MB = 150
+
     def __init__(self, *args, **kwargs):
         """
         user se pasa desde la view para:
@@ -105,6 +102,8 @@ class ReparacionForm(forms.ModelForm):
         """
         self.user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
+        self.fields["imagen"].required = True
+        self.fields["video"].required = False
 
         # Si es creación nueva
         if not self.instance.pk and self.user:
