@@ -7,9 +7,23 @@
 
 body {
     margin: 0;
-    font-family: 'Manrope', sans-serif;
-    background-color: #0B1C2D;
-    color: #000;
+    font-family: 'Inter', sans-serif;
+    background-color: #000;
+    color: #fff;
+    min-height: 100vh;
+}
+
+input,
+select,
+textarea,
+button,
+label {
+    font-family: 'Inter', sans-serif;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
 }
 
 /* ========================
@@ -18,41 +32,22 @@ body {
 .main-header {
     display: flex;
     justify-content: center;
-    padding: 40px 20px 20px;
+    padding: 24px 20px;
 }
 
-.title-badge {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #000; /* fondo negro */
-    border-radius: 12px;    /* bordes redondeados */
-    color: #fff;
-    font-family: 'Rubik Dirt', cursive; /* fuente Dirt */
-    text-align: center;
-    margin: 20px auto;
+.header-inner {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    justify-content: center;
 }
 
-.badge-video {
-    display: inline-block;
-    padding: 6px 10px;
-    border-radius: 999px;
-    font-size: 12px;
-    font-weight: 600;
+.header-logo {
+    max-width: 240px;
+    width: 100%;
+    height: auto;
 }
 
-
-.logo-icon {
-    width: 40px;
-    height: 40px;
-    vertical-align: middle;
-    margin-left: 10px;
-}
-
-.page-title {
-    text-align: center;
-    margin: 30px 0 10px;
-    font-size: 2rem;
-}
 /* ========================
    MAIN
 ======================== */
@@ -62,17 +57,45 @@ body {
     justify-content: center;
 }
 
+.content-wrapper {
+    width: 100%;
+    max-width: 1100px;
+}
+
+.page-title {
+    text-align: center;
+    margin: 20px 0 16px;
+    font-size: 2rem;
+    color: #fff;
+}
+
 /* ========================
    CARDS / FORM / DASHBOARD
 ======================== */
 .card,
 .form-container {
-    background-color: #FFFFFF;
-    border: 4px solid #000;
-    border-radius: 10px;
-    padding: 18px 20px;
-    max-width: 900px;
+    background-color: #fff;
+    border: 3px solid #000;
+    border-radius: 12px;
+    padding: 22px 24px;
     width: 100%;
+    color: #000;
+}
+
+.form-container {
+    max-width: 620px;
+    margin: 0 auto;
+}
+
+.form-card h2 {
+    text-align: center;
+    margin: 8px 0 18px;
+    font-size: 1.6rem;
+}
+
+.form-description {
+    margin-bottom: 18px;
+    line-height: 1.5;
 }
 
 /* ========================
@@ -80,7 +103,7 @@ body {
 ======================== */
 .dashboard {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 20px;
 }
 
@@ -91,8 +114,8 @@ body {
     width: 100%;
     max-height: 180px;
     object-fit: cover;
-    border: 4px solid #000;
-    border-radius: 6px;
+    border: 3px solid #000;
+    border-radius: 8px;
     margin-bottom: 10px;
 }
 
@@ -103,8 +126,18 @@ body {
 
 .card p {
     margin: 4px 0;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     line-height: 1.25;
+}
+
+.badge-video {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: 2px solid #000;
+    margin-bottom: 8px;
 }
 
 /* ========================
@@ -115,151 +148,133 @@ body {
     padding: 4px 10px;
     border-radius: 8px;
     color: #0a0a0a;
-    font-weight: bold;
+    font-weight: 600;
 }
 
-.estado.pendiente_presupuesto { background-color: #ed961d; } /* naranja */
-.estado.pendiente_pago { background-color: #ed961d; } /* naranja */
-.estado.en_proceso { background-color: #2ecd46; } /* verde */
-.estado.listo_para_entregar { background-color: #2ecd46; } /* verde */
-.estado.entregado { background-color: #bf44c8; } /* pink */
-.estado.finalizado { background-color: #060607; } /* negro oscuro */
+.estado.pendiente_presupuesto { background-color: #ed961d; }
+.estado.pendiente_pago { background-color: #ed961d; }
+.estado.en_proceso { background-color: #2ecd46; }
+.estado.listo_para_entregar { background-color: #2ecd46; }
+.estado.entregado { background-color: #bf44c8; }
+.estado.finalizado { background-color: #060607; color: #fff; }
 
 /* ========================
-   BOTONES
+   BUTTONS
 ======================== */
-.create-btn {
+button,
+.create-btn,
+.back-link {
     display: inline-block;
-    margin: 20px auto;
-    padding: 12px 24px;
+    padding: 10px 18px;
     background-color: #000;
     color: #fff;
-    font-weight: bold;
-    border-radius: 10px;
+    font-weight: 600;
+    border-radius: 8px;
     text-decoration: none;
-    border: 3px solid #000;
-    transition: all 0.2s ease;
+    border: 2px solid #000;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
-.create-btn:hover {
+button:hover,
+.create-btn:hover,
+.back-link:hover {
     background-color: #222;
     border-color: #222;
 }
+
+.back-link {
+    background-color: #fff;
+    color: #000;
+    margin-bottom: 16px;
+}
+
+.back-link:hover {
+    background-color: #f2f2f2;
+    color: #000;
+}
+
+.form-actions {
+    margin-top: 20px;
+    text-align: center;
+}
+
 /* ========================
    FORM
 ======================== */
 label {
     font-weight: 600;
-    margin-top: 10px;
+    margin-top: 12px;
     display: block;
 }
 
-input, select, textarea {
+input,
+select,
+textarea {
     width: 100%;
-    padding: 8px;
+    padding: 10px 12px;
     border: 2px solid #000;
-    border-radius: 4px;
-    margin-top: 4px;
-    font-family: 'Manrope', sans-serif;
+    border-radius: 6px;
+    margin-top: 6px;
+    font-size: 0.95rem;
 }
 
-/* ========================
-   HEADER + INSTAGRAM
-======================== */
+textarea {
+    resize: vertical;
+}
 
-.main-header {
-    padding: 25px 20px 15px;
+.form-container form {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
 }
 
-.header-inner {
-    width: 100%;
-    max-width: 1200px;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.form-container p {
+    margin: 0 0 12px;
 }
 
-/* botón instagram */
-.ig-contact {
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
+.remember-me {
+    margin: 10px 0 16px;
     display: flex;
     align-items: center;
     gap: 8px;
-    background-color: #000;
-    color: #f3f1f1;
-    padding: 8px 14px;
-    border-radius: 999px;
-    text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: bold;
 }
 
-.ig-contact img {
-    width: 18px;
-    height: 18px;
+.error-message {
+    color: #b40000;
+    margin-bottom: 10px;
+    font-weight: 600;
 }
 
-.ig-contact:hover {
-    background-color: #f8f5f5;
+.auth-link {
+    text-align: center;
+    margin-top: 16px;
+    color: #000;
+}
+
+.auth-link a {
+    color: #000;
+    font-weight: 600;
+    text-decoration: underline;
 }
 
 /* ========================
-   BOTONES MARCA TALLER
+   RESPONSIVE
 ======================== */
-.btn-taller {
-    appearance: none;
-    border: none;
-    cursor: pointer;
+@media (max-width: 720px) {
+    .main-content {
+        padding: 16px;
+    }
 
-    background: #000;
-    color: #fff;
+    .form-container,
+    .card {
+        padding: 18px;
+    }
 
-    font-family: 'Permanent Marker', cursive;
-    font-size: 1.1rem;
-    letter-spacing: 1px;
+    .page-title {
+        font-size: 1.6rem;
+    }
 
-    padding: 14px 28px;
-    border-radius: 16px;
-
-    position: relative;
-    box-shadow:
-        0 5px 0 #000,
-        inset 0 -3px 0 rgba(255,255,255,0.15);
-
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-/* textura irregular */
-.btn-taller::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: 16px;
-    background: repeating-linear-gradient(
-        -2deg,
-        rgba(255,255,255,0.06),
-        rgba(255,255,255,0.06) 4px,
-        rgba(0,0,0,0.06) 8px
-    );
-    pointer-events: none;
-}
-
-/* hover artesanal */
-.btn-taller:hover {
-    transform: translateY(2px) rotate(-0.5deg);
-    box-shadow:
-        0 3px 0 #000,
-        inset 0 -2px 0 rgba(255,255,255,0.15);
-}
-
-/* centrado cómodo en forms */
-.form-actions {
-    margin-top: 20px;
-    text-align: center;
+    .header-logo {
+        max-width: 200px;
+    }
 }

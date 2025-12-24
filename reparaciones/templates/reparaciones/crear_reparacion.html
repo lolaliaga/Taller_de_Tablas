@@ -5,15 +5,17 @@
 
 {% block content %}
 
-<div class="form-container">
+<div class="form-container form-card">
+    <a class="back-link" href="{% url 'inicio' %}" onclick="if (window.history.length > 1) { history.back(); return false; }">Volver atrás</a>
+
     <h2>Crear Reparación</h2>
 
-    <div class="info">
-        Subí la info de tu reparación para que podamos evaluar el arreglo, darte un presupuesto y ponernos en contacto si surge alguna duda. 
+    <p class="form-description">
+        Subí la info de tu reparación para que podamos evaluar el arreglo, darte un presupuesto y ponernos en contacto si surge alguna duda.
         Después de esto, actualizaremos tu solicitud con el presupuesto y fecha estimada. Solo entonces podrás aceptar y procederemos al arreglo.
         <br><br>
         ¿Tenés alguna duda o el formulario funciona mal? Dejanos tu comentario para que te contactemos.
-    </div>
+    </p>
 
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
@@ -45,8 +47,7 @@
         <small>Recomendado: 30–60 segundos. Máx. 150MB.</small>
         {% if form.video.errors %}
             <div style="color:red;">{{ form.video.errors }}</div>
-        {% endif %} 
-
+        {% endif %}
 
         <label for="id_comentario">Comentario / Duda (opcional)</label>
         <textarea name="comentario" id="id_comentario" rows="3"
