@@ -1,3 +1,5 @@
+{{ form.non_field_errors }}
+
 {% extends "reparaciones/base.html" %}
 {% load static %}
 
@@ -43,7 +45,8 @@
         {{ form.imagen2 }}
 
         <label for="id_video">Video (opcional)</label>
-        <input type="file" name="video" id="id_video" accept="video/mp4,video/quicktime,video/webm">
+        {{ form.video }}
+        {{ form.video.errors }}
         <small>Recomendado: 30–60 segundos. Máx. 150MB.</small>
         {% if form.video.errors %}
             <div style="color:red;">{{ form.video.errors }}</div>
