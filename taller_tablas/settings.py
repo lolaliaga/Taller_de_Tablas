@@ -46,15 +46,17 @@ USE_X_FORWARDED_HOST = True
 # --------------------------------------------------
 # APPLICATIONS
 # --------------------------------------------------
-INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
 
-    'reparaciones',
+INSTALLED_APPS = [
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+
+    "storages",        # ✅ SIEMPRE activo
+    "reparaciones",
 ]
 
 # --------------------------------------------------
@@ -164,12 +166,13 @@ STORAGES.setdefault(
     {"BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"},
 )
 
+#Comment
 # Activar R2 solo si están todas las env vars
-if all([R2_BUCKET_NAME, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_ENDPOINT_URL, R2_PUBLIC_HOST]):
-    if "storages" not in INSTALLED_APPS:
-        INSTALLED_APPS += ["storages"]
+#if all([R2_BUCKET_NAME, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_ENDPOINT_URL, R2_PUBLIC_HOST]):
+#   if "storages" not in INSTALLED_APPS:
+#        INSTALLED_APPS += ["storages"]
 
-    STORAGES["default"] = {
+STORAGES["default"] = {
         "BACKEND": "storages.backends.s3.S3Storage",
         "OPTIONS": {
             "bucket_name": R2_BUCKET_NAME,
@@ -184,7 +187,7 @@ if all([R2_BUCKET_NAME, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_ENDPOINT_URL,
         },
     }
 
-    MEDIA_URL = f"https://{R2_PUBLIC_HOST}/"
+MEDIA_URL = f"https://{R2_PUBLIC_HOST}/"
 
 # --------------------------------------------------
 # AUTH REDIRECTS
