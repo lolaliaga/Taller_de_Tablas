@@ -1,62 +1,44 @@
 {% extends "reparaciones/base.html" %}
-{% load static %}
 
 {% block title %}Crear Reparación{% endblock %}
-{% block content %}
 
+{% block content %}
 <div class="form-container form-card">
-    <a class="back-link" href="{% url 'inicio' %}" onclick="if (window.history.length > 1) { history.back(); return false; }">Volver atrás</a>
+    <a class="back-link" href="{% url 'inicio' %}">Volver atrás</a>
 
     <h2>Crear Reparación</h2>
 
-    <p class="form-description">
-        Subí la info de tu reparación para que podamos evaluar el arreglo, darte un presupuesto y ponernos en contacto si surge alguna duda.
-        Después de esto, actualizaremos tu solicitud con el presupuesto y fecha estimada. Solo entonces podrás aceptar y procederemos al arreglo.
-        <br><br>
-        ¿Tenés alguna duda o el formulario funciona mal? Dejanos tu comentario para que te contactemos.
-    </p>
-
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
+
         {{ form.non_field_errors }}
 
-        <label for="id_nombre_cliente">Cliente</label>
+        <label>Cliente</label>
         {{ form.nombre_cliente }}
 
-        <label for="id_telefono">Teléfono</label>
+        <label>Teléfono</label>
         {{ form.telefono }}
 
-        <label for="id_ubicacion">Ubicación</label>
+        <label>Ubicación</label>
         {{ form.ubicacion }}
 
-        <label for="id_tipo_equipo">Tipo de Equipo</label>
+        <label>Tipo de equipo</label>
         {{ form.tipo_equipo }}
 
-        <label for="id_descripcion">Descripción</label>
+        <label>Descripción</label>
         {{ form.descripcion }}
 
-        <label for="id_imagen">Imagen Principal</label>
+        <label>Imagen principal</label>
         {{ form.imagen }}
 
-        <label for="id_imagen2">Imagen Secundaria (opcional)</label>
+        <label>Imagen secundaria (opcional)</label>
         {{ form.imagen2 }}
 
-        <label for="id_video">Video (opcional)</label>
+        <label>Video (opcional)</label>
         {{ form.video }}
         {{ form.video.errors }}
-        <small>Recomendado: 30–60 segundos. Máx. 150MB.</small>
-        {% if form.video.errors %}
-            <div style="color:red;">{{ form.video.errors }}</div>
-        {% endif %}
-
-        <label for="id_comentario">Comentario / Duda (opcional)</label>
-        <textarea name="comentario" id="id_comentario" rows="3"
-                  placeholder="Escribe aquí tu comentario..."></textarea>
 
         <button type="submit">Crear Reparación</button>
-    
-    
     </form>
 </div>
-
 {% endblock %}

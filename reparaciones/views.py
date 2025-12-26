@@ -8,9 +8,12 @@ import logging
 from .forms import RegistroForm, ReparacionForm
 from .models import Reparacion
 
+from django.http import HttpResponse #prueba issue 500
+
 logger = logging.getLogger(__name__)
 
-
+def inicio(request):
+    return HttpResponse("OK HOME") ##prueba issue 500
 # -----------------------------
 # Registro de usuario
 # -----------------------------
@@ -20,43 +23,40 @@ def registrar(request):
         if form.is_valid():
             user = form.save()
 
-            # Login robusto (asegura backend)
-            raw_password = form.cleaned_data.get("password1")
-            authed_user = authenticate(request, username=user.username, password=raw_password)
-            login(request, authed_user or user)
+            # Forzar backend para evitar errores silenciosos
+            user.backend = "django.contrib.auth.backends.ModelBackend"
+            login(request, user)
 
-            try:
-                return redirect("inicio")
-            except NoReverseMatch:
-                return redirect("/")
+            return redirect("inicio")
     else:
         form = RegistroForm()
 
     return render(request, "reparaciones/registrar.html", {"form": form})
 
-
 # -----------------------------
 # Crear reparación
 # -----------------------------
+
 @login_required
 def crear_reparacion(request):
     if request.method == "POST":
-        form = ReparacionForm(request.POST, request.FILES, user=request.user)
+        form = ReparacionForm(request.POST, request.FILES)
         if form.is_valid():
-            try:
-                reparacion = form.save(commit=False)
-                reparacion.usuario = request.user
-                reparacion.save()
-                return redirect("inicio")
-            except Exception as e:
-                logger.exception("Error al guardar reparación")
-                form.add_error(None, f"Error al guardar/subir: {type(e).__name__}: {e}")
+            reparacion = form.save(commit=False)
+            reparacion.usuario = request.user
+            reparacion.save()
+
+            # ✅ REDIRECT CLAVE
+            return redirect("inicio")
+
     else:
-        form = ReparacionForm(user=request.user)
+        form = ReparacionForm()
 
-    return render(request, "reparaciones/crear_reparacion.html", {"form": form})
-
-
+    return render(
+        request,
+        "reparaciones/crear_reparacion.html",
+        {"form": form}
+    )
 # -----------------------------
 # Dashboard de usuario
 # -----------------------------
@@ -67,13 +67,16 @@ def crear_reparacion(request):
 #
  #   return render(request, "reparaciones/inicio.html", {"reparaciones": reparaciones})
 
-@login_required
+#@login_required
+#def inicio(request):
+#    return render(
+#        request,
+#        "reparaciones/inicio.html",
+#        {"reparaciones": []}
+#    )
+
 def inicio(request):
-    return render(
-        request,
-        "reparaciones/inicio.html",
-        {"reparaciones": []}
-    )
+    return render(request, "reparaciones/inicio.html", {"reparaciones": []})
 
 
 # -----------------------------
