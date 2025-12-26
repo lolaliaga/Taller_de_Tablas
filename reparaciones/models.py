@@ -20,7 +20,7 @@ PRIORIDADES = [
 ]
 
 ESTADOS_EDITABLES_PRIORIDAD = [
-    'recibida'
+    'recibida',
     'pendiente_presupuesto',
     'pendiente_pago',
 ]
@@ -43,7 +43,7 @@ class Reparacion(models.Model):
     estado = models.CharField(
         max_length=50,
         choices=ESTADOS,
-        default='pendiente_presupuesto'
+        default='recibida'
     )
     orden_usuario = models.PositiveIntegerField(
         default=1,
