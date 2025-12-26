@@ -1,11 +1,14 @@
-from django.shortcuts import render, redirect
+import os
+
+from django.http import FileResponse
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 from django.contrib.auth.views import LoginView
 import logging
 
 from .forms import RegistroForm, ReparacionForm
-from .models import Reparacion
+from .models import Presupuesto, Reparacion
 
 logger = logging.getLogger(__name__)
 
@@ -16,7 +19,7 @@ logger = logging.getLogger(__name__)
 def inicio(request):
     reparaciones = Reparacion.objects.filter(
         usuario=request.user
-    ).order_by("-created_at")
+    ).prefetch_related("presupuestos").order_by("-created_at")
 
     return render(
         request,
@@ -87,3 +90,18 @@ class CustomLoginView(LoginView):
             self.request.session.set_expiry(None)
 
         return super().form_valid(form)
+
+
+@login_required
+def descargar_presupuesto(request, presupuesto_id):
+    presupuesto = get_object_or_404(
+        Presupuesto,
+        pk=presupuesto_id,
+        reparacion__usuario=request.user,
+    )
+    archivo = presupuesto.archivo_presupuesto
+    return FileResponse(
+        archivo.open("rb"),
+        as_attachment=True,
+        filename=os.path.basename(archivo.name),
+    )

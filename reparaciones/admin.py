@@ -1,6 +1,21 @@
 from django.contrib import admin
-from .models import Reparacion
 from django.utils.html import format_html
+
+from .models import Presupuesto, Reparacion
+
+
+class PresupuestoInline(admin.TabularInline):
+    model = Presupuesto
+    extra = 0
+    fields = (
+        "archivo_presupuesto",
+        "estado",
+        "fecha_creacion",
+        "fecha_envio",
+        "usuario",
+        "notas_internas",
+    )
+    readonly_fields = ("fecha_creacion",)
 
 @admin.register(Reparacion)
 class ReparacionAdmin(admin.ModelAdmin):
@@ -9,6 +24,7 @@ class ReparacionAdmin(admin.ModelAdmin):
     search_fields = ('nombre_cliente', 'telefono', 'ubicacion', 'tipo_equipo')
     ordering = ('-id',)
     readonly_fields = ('usuario', 'tiene_video')  # El usuario que creó la reparación no se puede modificar desde el admin
+    inlines = (PresupuestoInline,)
     def tiene_video(self, obj):
         return bool(obj.video)
     tiene_video.boolean = True
@@ -80,4 +96,30 @@ class ReparacionAdmin(admin.ModelAdmin):
         return "—"
 
     video_link.short_description = "Video"
-    
+
+
+@admin.register(Presupuesto)
+class PresupuestoAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "reparacion",
+        "usuario",
+        "estado",
+        "fecha_creacion",
+        "fecha_envio",
+        "archivo_link",
+    )
+    list_filter = ("estado", "fecha_creacion", "usuario")
+    search_fields = ("reparacion__id", "usuario__username")
+    ordering = ("-fecha_creacion",)
+    readonly_fields = ("fecha_creacion",)
+
+    def archivo_link(self, obj):
+        if obj.archivo_presupuesto:
+            return format_html(
+                '<a href="{}" target="_blank">📄 Ver presupuesto</a>',
+                obj.archivo_presupuesto.url
+            )
+        return "—"
+
+    archivo_link.short_description = "Archivo"

@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import FileExtensionValidator
+from django.core.exceptions import ValidationError
 
 
 ESTADOS = [
@@ -12,6 +13,24 @@ ESTADOS = [
     ("entregado", "Recibido por el cliente"),
     ("finalizado", "Recibimos el pago final"),
 ]
+
+ESTADOS_PRESUPUESTO = [
+    ("pendiente", "Pendiente"),
+    ("enviado", "Enviado"),
+    ("aprobado", "Aprobado"),
+    ("rechazado", "Rechazado"),
+]
+
+MAX_PRESUPUESTO_MB = 20
+
+
+def validar_tamano_presupuesto(archivo):
+    size_bytes = getattr(archivo, "size", 0) or 0
+    size_mb = size_bytes / (1024 * 1024)
+    if size_mb > MAX_PRESUPUESTO_MB:
+        raise ValidationError(
+            f"El archivo pesa {size_mb:.1f}MB y supera el máximo permitido ({MAX_PRESUPUESTO_MB}MB)."
+        )
 
 
 class Reparacion(models.Model):
@@ -46,31 +65,6 @@ class Reparacion(models.Model):
         default="recibida",
     )
 
-    # -----------------------------
-    # Presupuesto (TALLER)
-    # -----------------------------
-    presupuesto_monto = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        blank=True,
-        null=True,
-        help_text="Monto del presupuesto en pesos",
-    )
-
-    presupuesto_detalle = models.TextField(
-        blank=True,
-        null=True,
-        help_text="Detalle del presupuesto o aclaraciones",
-    )
-
-    presupuesto_archivo = models.FileField(
-        upload_to="reparaciones/presupuestos/",
-        blank=True,
-        null=True,
-        validators=[FileExtensionValidator(["pdf", "jpg", "jpeg", "png"])],
-        help_text="Archivo adjunto del presupuesto (PDF o imagen)",
-    )
-
     created_at = models.DateTimeField(auto_now_add=True)
 
     fecha_estimada_entrega = models.DateField(
@@ -79,3 +73,36 @@ class Reparacion(models.Model):
     )
 
     # -------------------
+
+
+class Presupuesto(models.Model):
+    usuario = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="presupuestos",
+    )
+    reparacion = models.ForeignKey(
+        Reparacion,
+        on_delete=models.CASCADE,
+        related_name="presupuestos",
+    )
+    archivo_presupuesto = models.FileField(
+        upload_to="reparaciones/presupuestos/",
+        validators=[validar_tamano_presupuesto],
+    )
+    estado = models.CharField(
+        max_length=20,
+        choices=ESTADOS_PRESUPUESTO,
+        default="pendiente",
+    )
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+    fecha_envio = models.DateTimeField(blank=True, null=True)
+    notas_internas = models.TextField(blank=True)
+
+    class Meta:
+        ordering = ["-fecha_creacion"]
+
+    def __str__(self):
+        return f"Presupuesto #{self.pk} - Reparación #{self.reparacion_id}"

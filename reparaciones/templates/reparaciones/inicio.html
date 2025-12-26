@@ -61,32 +61,20 @@
                     </p>
                 {% endif %}
 
-                {% if reparacion.presupuesto_monto or reparacion.presupuesto_detalle or reparacion.presupuesto_archivo %}
+                {% if reparacion.presupuestos.all|length %}
                     <div class="presupuesto-box">
-                        <h4>Presupuesto</h4>
-
-                        {% if reparacion.presupuesto_monto %}
-                            <p><strong>Monto:</strong> ${{ reparacion.presupuesto_monto }}</p>
-                        {% endif %}
-
-                        {% if reparacion.presupuesto_detalle %}
-                            <p>{{ reparacion.presupuesto_detalle }}</p>
-                        {% endif %}
-
-                        {% if reparacion.presupuesto_archivo %}
-                            <a href="{{ reparacion.presupuesto_archivo.url }}" target="_blank" class="presupuesto-link">
-                                📄 Ver presupuesto adjunto
-                            </a>
-                        {% endif %}
-
-                        <a
-                        class="btn-aceptar-presupuesto"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        href="https://wa.me/5492944786392?text=Hola!%20Acepto%20el%20presupuesto%20de%20la%20reparaci%C3%B3n%20%23{{ reparacion.id }}.%0ACliente:%20{{ reparacion.nombre_cliente }}%0AEquipo:%20{{ reparacion.tipo_equipo }}"
-                        >
-                        ✅ Aceptar presupuesto
-                        </a>
+                        <h4>Presupuestos</h4>
+                        <ul class="presupuesto-list">
+                            {% for presupuesto in reparacion.presupuestos.all %}
+                                <li>
+                                    <strong>Estado:</strong> {{ presupuesto.get_estado_display }}
+                                    <span>· {{ presupuesto.fecha_creacion|date:"d/m/Y" }}</span>
+                                    <a href="{% url 'descargar_presupuesto' presupuesto.id %}" class="presupuesto-link">
+                                        📄 Descargar presupuesto
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
                     </div>
                 {% endif %}
 
