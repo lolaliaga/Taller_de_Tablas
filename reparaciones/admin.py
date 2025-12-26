@@ -16,7 +16,7 @@ class ReparacionAdmin(admin.ModelAdmin):
 
     fieldsets = (
         (None, {
-            'fields': ('usuario', 'nombre_cliente', 'telefono', 'ubicacion', 'tipo_equipo', 'descripcion', 'imagen', 'estado', 'fecha_finalizacion', 'tiene_video')
+            'fields': ('usuario', 'nombre_cliente', 'telefono', 'ubicacion', 'tipo_equipo', 'descripcion', 'imagen', 'estado', 'fecha_estimada_entrega', 'tiene_video')
         }),
     )
 
