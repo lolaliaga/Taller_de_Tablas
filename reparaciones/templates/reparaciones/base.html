@@ -16,7 +16,10 @@
         {% if request.user.is_authenticated %}
             <div class="header-user">
                 <span class="header-user-label">Usuario: {{ request.user.username }}</span>
-                <a class="nav-button" href="{% url 'logout' %}">Cerrar sesión</a>
+                <form method="post" action="{% url 'logout' %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="nav-button">Cerrar sesión</button>
+                </form>
             </div>
         {% endif %}
         <img src="{% static 'reparaciones/logo_printscren.png' %}" alt="Taller de Tablas" class="header-logo">
