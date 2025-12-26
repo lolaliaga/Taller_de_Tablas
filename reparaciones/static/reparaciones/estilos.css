@@ -5,12 +5,41 @@
     box-sizing: border-box;
 }
 
+:root {
+    --font-primary: 'Barlow Condensed', sans-serif;
+}
+
+html,
+body {
+    font-family: var(--font-primary);
+}
+
 body {
     margin: 0;
-    font-family: 'Inter', sans-serif;
     background-color: #111;
     color: #fff;
     min-height: 100vh;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a,
+span,
+button,
+input,
+textarea,
+select,
+label,
+nav,
+ul,
+li {
+    font-family: var(--font-primary);
 }
 
 input,
@@ -18,7 +47,7 @@ select,
 textarea,
 button,
 label {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-primary);
 }
 
 img {
