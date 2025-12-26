@@ -4,6 +4,7 @@ from django.core.validators import FileExtensionValidator
 
 
 ESTADOS = [
+    ('recibida', 'Recibimos tu solicitud'),
     ('pendiente_presupuesto', 'Estamos presupuestando el pedido'),
     ('pendiente_pago', 'Estamos a espera de tu aprobación y pago de seña'),
     ('en_proceso', 'En proceso de reparación'),
@@ -19,6 +20,7 @@ PRIORIDADES = [
 ]
 
 ESTADOS_EDITABLES_PRIORIDAD = [
+    'recibida'
     'pendiente_presupuesto',
     'pendiente_pago',
 ]
