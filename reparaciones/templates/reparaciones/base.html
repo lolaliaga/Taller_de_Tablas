@@ -13,21 +13,29 @@
 
 <header class="main-header">
     <div class="header-inner">
+        {% if request.user.is_authenticated %}
+            <div class="header-user">
+                <span class="header-user-label">Usuario: {{ request.user.username }}</span>
+                <a class="nav-button" href="{% url 'logout' %}">Cerrar sesión</a>
+            </div>
+        {% endif %}
         <img src="{% static 'reparaciones/logo_printscren.png' %}" alt="Taller de Tablas" class="header-logo">
+        <nav class="header-nav">
+            <a class="nav-button" href="{% url 'inicio' %}">Inicio</a>
+            <a class="nav-button" href="{% url 'crear_reparacion' %}">Crear reparación</a>
+            <a class="nav-button" href="{% url 'registrar' %}">Registrarse</a>
+        </nav>
         <div class="header-socials">
             <a
                 class="header-social"
-                href="https://wa.me/5492944786392"
+                href="https://www.instagram.com/tallerdetablas/"
                 target="_blank"
                 rel="noopener noreferrer"
             >
-
                 <img src="{% static 'reparaciones/ig-icon.svg' %}" alt="Instagram">
-                <span>@tallerdtablas</span>
             </a>
-            <a class="header-social" href="https://wa.me/1234" target="_blank" rel="noopener noreferrer">
+            <a class="header-social" href="https://wa.me/5492944786392" target="_blank" rel="noopener noreferrer">
                 <img src="{% static 'reparaciones/whatsapp-icon.svg' %}" alt="WhatsApp">
-                <span>1234</span>
             </a>
         </div>
     </div>
