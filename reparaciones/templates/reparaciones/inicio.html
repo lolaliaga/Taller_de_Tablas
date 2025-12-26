@@ -40,20 +40,11 @@
 
                 <p>
                     <strong>Estado:</strong>
-                    {% if reparacion.estado == 'pendiente_presupuesto' %}
-                        <span class="estado badge pendiente_presupuesto">📋 Presupuestando</span>
-                    {% elif reparacion.estado == 'pendiente_pago' %}
-                        <span class="estado badge pendiente_pago">💸 Esperando seña</span>
-                    {% elif reparacion.estado == 'en_proceso' %}
-                        <span class="estado badge en_proceso">🪚 En reparación</span>
-                    {% elif reparacion.estado == 'listo_para_entregar' %}
-                        <span class="estado badge listo_para_entregar">📦 Listo en taller</span>
-                    {% elif reparacion.estado == 'entregado' %}
-                        <span class="estado badge entregado">📬 Recibido</span>
-                    {% elif reparacion.estado == 'finalizado' %}
-                        <span class="estado badge finalizado">🤝 Pago final recibido</span>
-                    {% endif %}
+                    <span class="estado badge {{ reparacion.estado }}">
+                        {{ reparacion.get_estado_display }}
+                    </span>
                 </p>
+
 
                 {% if reparacion.fecha_finalizacion %}
                     <p><strong>Fecha de finalización:</strong> {{ reparacion.fecha_finalizacion }}</p>
