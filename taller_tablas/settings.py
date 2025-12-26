@@ -150,44 +150,13 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # --- R2 (MEDIA) ---
-R2_BUCKET_NAME = os.environ.get("R2_BUCKET_NAME")
-R2_ACCESS_KEY_ID = os.environ.get("R2_ACCESS_KEY_ID")
-R2_SECRET_ACCESS_KEY = os.environ.get("R2_SECRET_ACCESS_KEY")
-R2_ENDPOINT_URL = os.environ.get("R2_ENDPOINT_URL")  # https://<ACCOUNT_ID>.r2.cloudflarestorage.com
-R2_PUBLIC_HOST = os.environ.get("R2_PUBLIC_HOST")    # sin https://
+AWS_ACCESS_KEY_ID = os.environ.get("R2_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.environ.get("R2_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = os.environ.get("R2_BUCKET_NAME")
+AWS_S3_ENDPOINT_URL = os.environ.get("R2_ENDPOINT_URL")  # https://<ACCOUNT_ID>.r2.cloudflarestorage.com
+AWS_S3_REGION_NAME = os.environ.get("R2_REGION", "auto")
 
-# Asegurar STORAGES existe (Django 6)
-if "STORAGES" not in globals():
-    STORAGES = {}
-
-# Mantener static con WhiteNoise (si ya lo tenés, no dupliques)
-STORAGES.setdefault(
-    "staticfiles",
-    {"BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"},
-)
-
-#Comment
-# Activar R2 solo si están todas las env vars
-#if all([R2_BUCKET_NAME, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_ENDPOINT_URL, R2_PUBLIC_HOST]):
-#   if "storages" not in INSTALLED_APPS:
-#        INSTALLED_APPS += ["storages"]
-
-STORAGES["default"] = {
-        "BACKEND": "storages.backends.s3.S3Storage",
-        "OPTIONS": {
-            "bucket_name": R2_BUCKET_NAME,
-            "access_key": R2_ACCESS_KEY_ID,
-            "secret_key": R2_SECRET_ACCESS_KEY,
-            "endpoint_url": R2_ENDPOINT_URL,
-            "region_name": os.environ.get("R2_REGION", "auto"),
-            "custom_domain": R2_PUBLIC_HOST,
-            "querystring_auth": False,     # bucket público → URLs directas
-            "default_acl": None,           # R2 no usa ACL como AWS
-            "file_overwrite": False,       # evita pisar archivos con mismo nombre
-        },
-    }
-
-MEDIA_URL = f"https://{R2_PUBLIC_HOST}/"
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
 # --------------------------------------------------
 # AUTH REDIRECTS
