@@ -132,16 +132,18 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-STORAGES = globals().get("STORAGES", {})
+# ===============================
+# Django Storages (Django 4.2+)
+# ===============================
 
-if DEBUG:
-    STORAGES["staticfiles"] = {
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+    },
+    "staticfiles": {
         "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
-    }
-else:
-    STORAGES["staticfiles"] = {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    }
+    },
+}
 
 # --------------------------------------------------
 # MEDIA FILES (imagenes)
@@ -156,7 +158,7 @@ AWS_STORAGE_BUCKET_NAME = os.environ.get("R2_BUCKET_NAME")
 AWS_S3_ENDPOINT_URL = os.environ.get("R2_ENDPOINT_URL")  # https://<ACCOUNT_ID>.r2.cloudflarestorage.com
 AWS_S3_REGION_NAME = os.environ.get("R2_REGION", "auto")
 
-DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+###DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
 # --------------------------------------------------
 # AUTH REDIRECTS
