@@ -5,4 +5,9 @@ urlpatterns = [
     path('', views.inicio, name='inicio'),
     path('crear/', views.crear_reparacion, name='crear_reparacion'),
     path('registrar/', views.registrar, name='registrar'),
+    path(
+        'presupuestos/<int:presupuesto_id>/descargar/',
+        views.descargar_presupuesto,
+        name='descargar_presupuesto',
+    ),
 ]
