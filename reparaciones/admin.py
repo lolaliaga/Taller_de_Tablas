@@ -4,7 +4,7 @@ from django.utils.html import format_html
 
 @admin.register(Reparacion)
 class ReparacionAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nombre_cliente', 'telefono', 'ubicacion', 'tipo_equipo', 'estado', 'fecha_finalizacion', 'usuario', "imagen_link", 'video_link', "created_at")
+    list_display = ('id', 'nombre_cliente', 'telefono', 'ubicacion', 'tipo_equipo', 'estado', 'fecha_estimada_entrega', 'usuario', "imagen_link", 'video_link', "created_at")
     list_filter = ('estado', 'tipo_equipo', 'usuario')
     search_fields = ('nombre_cliente', 'telefono', 'ubicacion', 'tipo_equipo')
     ordering = ('-id',)
