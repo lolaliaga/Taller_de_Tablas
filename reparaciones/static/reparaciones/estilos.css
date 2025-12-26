@@ -39,30 +39,54 @@ img {
     width: 100%;
     max-width: 1200px;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     position: relative;
+    gap: 16px;
 }
 
 .header-logo {
-    max-width: 240px;
+    max-width: 312px;
     width: 100%;
     height: auto;
+}
+
+.header-user {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.header-user-label {
+    white-space: nowrap;
+}
+
+.header-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
 }
 
 .header-socials {
     position: absolute;
     right: 0;
     display: flex;
-    flex-direction: column;
-    gap: 8px;
-    align-items: flex-end;
+    top: 0;
+    gap: 12px;
+    align-items: center;
 }
 
 .header-social {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     color: #fff;
     text-decoration: none;
     font-weight: 600;
@@ -70,8 +94,8 @@ img {
 }
 
 .header-social img {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
 }
 
 /* ========================
@@ -212,7 +236,8 @@ img {
 ======================== */
 button,
 .create-btn,
-.back-link {
+.back-link,
+.nav-button {
     display: inline-block;
     padding: 10px 18px;
     background-color: #000;
@@ -227,7 +252,8 @@ button,
 
 button:hover,
 .create-btn:hover,
-.back-link:hover {
+.back-link:hover,
+.nav-button:hover {
     background-color: #222;
     border-color: #222;
 }
@@ -324,17 +350,22 @@ textarea {
     }
 
     .header-logo {
-        max-width: 200px;
+        max-width: 260px;
     }
 
-    .header-social {
+    .header-user,
+    .header-socials {
         position: static;
-        margin-top: 12px;
     }
 
     .header-inner {
         flex-direction: column;
-        gap: 10px;
+        gap: 12px;
+    }
+
+    .header-user {
+        flex-direction: column;
+        align-items: center;
     }
 
     .dashboard-shell {
