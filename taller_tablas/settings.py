@@ -158,6 +158,13 @@ AWS_STORAGE_BUCKET_NAME = os.environ.get("R2_BUCKET_NAME")
 AWS_S3_ENDPOINT_URL = os.environ.get("R2_ENDPOINT_URL")  # https://<ACCOUNT_ID>.r2.cloudflarestorage.com
 AWS_S3_REGION_NAME = os.environ.get("R2_REGION", "auto")
 
+# URL pública para servir MEDIA desde R2 (opcional pero recomendado)
+R2_PUBLIC_HOST = os.environ.get("R2_PUBLIC_HOST", "taller-de-tablas.onrender.com").strip()
+
+if R2_PUBLIC_HOST:
+    AWS_S3_CUSTOM_DOMAIN = R2_PUBLIC_HOST
+
+
 ###DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
 # --------------------------------------------------
