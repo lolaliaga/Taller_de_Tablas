@@ -54,9 +54,11 @@
                         <span class="media-badge">🎬 Video recibido</span>
                     {% endif %}
                 </div>
-
-                {% if reparacion.fecha_finalizacion %}
-                    <p><strong>Fecha de finalización:</strong> {{ reparacion.fecha_finalizacion }}</p>
+                {% if reparacion.fecha_estimada_entrega %}  
+                    <p>
+                     <strong>Fecha estimada de entrega:</strong>
+                     {{ reparacion.fecha_estimada_entrega }}
+                    </p>
                 {% endif %}
 
                 {% if reparacion.comentario_admin %}
