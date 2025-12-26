@@ -1,9 +1,10 @@
 from django.contrib import admin
 from .models import Reparacion
+from django.utils.html import format_html
 
 @admin.register(Reparacion)
 class ReparacionAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nombre_cliente', 'telefono', 'ubicacion', 'tipo_equipo', 'estado', 'fecha_finalizacion', 'usuario', 'tiene_video')
+    list_display = ('id', 'nombre_cliente', 'telefono', 'ubicacion', 'tipo_equipo', 'estado', 'fecha_finalizacion', 'usuario', "imagen_link", 'video_link', "created_at")
     list_filter = ('estado', 'tipo_equipo', 'usuario')
     search_fields = ('nombre_cliente', 'telefono', 'ubicacion', 'tipo_equipo')
     ordering = ('-id',)
@@ -53,5 +54,24 @@ class ReparacionAdmin(admin.ModelAdmin):
         queryset.update(estado='finalizado')
     marcar_finalizado.short_description = "Marcar como: Recibimos el pago final"
 
+    def imagen_link(self, obj):
+        if obj.imagen:
+            return format_html(
+                '<a href="{}" target="_blank">📷 Ver imagen</a>',
+                obj.imagen.url
+            )
+        return "—"
 
+    imagen_link.short_description = "Imagen"
+
+
+    def video_link(self, obj):
+        if obj.video:
+            return format_html(
+                '<a href="{}" target="_blank">🎬 Ver video</a>',
+                obj.video.url
+            )
+        return "—"
+
+    video_link.short_description = "Video"
     
