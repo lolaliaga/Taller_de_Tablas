@@ -62,7 +62,8 @@ def crear_reparacion(request):
 # -----------------------------
 @login_required
 def inicio(request):
-    reparaciones = Reparacion.objects.filter(usuario=request.user).order_by("orden_usuario", "-created_at")
+    reparaciones = Reparacion.objects.filter(usuario=request.user).order_by("-created_at")
+
     return render(request, "reparaciones/inicio.html", {"reparaciones": reparaciones})
 
 
