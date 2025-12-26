@@ -462,3 +462,37 @@ textarea {
 .btn-aceptar-presupuesto:hover {
   background-color: #5ace85;
 }
+
+/* ============================
+   FUENTE GLOBAL PARA FORMULARIOS
+   ============================ */
+
+input,
+textarea,
+select,
+button {
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+/* ============================
+   INPUT FILE (Seleccionar archivo)
+   ============================ */
+
+input[type="file"] {
+    font-family: inherit;
+}
+
+input[type="file"]::file-selector-button {
+    font-family: inherit;
+    font-size: 0.95rem;
+    padding: 8px 14px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background: #f2f2f2;
+    cursor: pointer;
+}
+
+input[type="file"]::file-selector-button:hover {
+    background: #e0e0e0;
+}
