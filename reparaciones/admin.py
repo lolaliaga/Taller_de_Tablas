@@ -21,15 +21,21 @@ class ReparacionAdmin(admin.ModelAdmin):
     )
 
     actions = [
-        'marcar_pendiente_presupuesto',
-        'marcar_pendiente_pago',
-        'marcar_en_proceso',
-        'marcar_listo_para_entregar',
-        'marcar_entregado',
-        'marcar_finalizado',
-    ]
+    'marcar_recibida',
+    'marcar_pendiente_presupuesto',
+    'marcar_pendiente_pago',
+    'marcar_en_proceso',
+    'marcar_listo_para_entregar',
+    'marcar_entregado',
+    'marcar_finalizado',
+]
+
 
     # Definición de acciones
+    def marcar_recibida(self, request, queryset):
+        queryset.update(estado='recibida')
+    marcar_recibida.short_description = "Marcar como: Recibimos tu solicitud"
+
     def marcar_pendiente_presupuesto(self, request, queryset):
         queryset.update(estado='pendiente_presupuesto')
     marcar_pendiente_presupuesto.short_description = "Marcar como: Estamos presupuestando el pedido"
