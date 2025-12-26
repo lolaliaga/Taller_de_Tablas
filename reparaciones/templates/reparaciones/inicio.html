@@ -61,30 +61,6 @@
                     </p>
                 {% endif %}
 
-                {% if reparacion.comentario_admin %}
-                    <p><strong>Comentario:</strong> {{ reparacion.comentario_admin }}</p>
-                {% endif %}
-
-                {% if reparacion.presupuesto_monto or reparacion.presupuesto_detalle or reparacion.presupuesto_archivo %}
-                    <div class="presupuesto-box">
-                        <h4>Presupuesto</h4>
-
-                        {% if reparacion.presupuesto_monto %}
-                            <p><strong>Monto:</strong> ${{ reparacion.presupuesto_monto }}</p>
-                        {% endif %}
-
-                        {% if reparacion.presupuesto_detalle %}
-                            <p>{{ reparacion.presupuesto_detalle }}</p>
-                        {% endif %}
-
-                        {% if reparacion.presupuesto_archivo %}
-                            <a href="{{ reparacion.presupuesto_archivo.url }}" target="_blank" class="presupuesto-link">
-                                📄 Ver presupuesto adjunto
-                            </a>
-                        {% endif %}
-                    </div>
-                {% endif %}
-                    
                 {% if reparacion.presupuesto_monto or reparacion.presupuesto_detalle or reparacion.presupuesto_archivo %}
                     <div class="presupuesto-box">
                         <h4>Presupuesto</h4>

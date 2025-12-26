@@ -8,7 +8,7 @@ class ReparacionAdmin(admin.ModelAdmin):
     list_filter = ('estado', 'tipo_equipo', 'usuario')
     search_fields = ('nombre_cliente', 'telefono', 'ubicacion', 'tipo_equipo')
     ordering = ('-id',)
-    readonly_fields = ('usuario',)  # El usuario que creó la reparación no se puede modificar desde el admin
+    readonly_fields = ('usuario', 'tiene_video')  # El usuario que creó la reparación no se puede modificar desde el admin
     def tiene_video(self, obj):
         return bool(obj.video)
     tiene_video.boolean = True
