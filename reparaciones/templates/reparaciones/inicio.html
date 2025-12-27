@@ -1,21 +1,23 @@
 {% extends "reparaciones/base.html" %}
 {% load static %}
 
-{% block title %}Mi Tablero{% endblock %}
+{% block title %}Tablero de reparaciones{% endblock %}
 
 {% block content %}
 
 <section class="dashboard-shell">
-    <h1 class="page-title">Mi Tablero</h1>
+    <h1 class="page-title">Tablero de reparaciones</h1>
 
-    <div class="dashboard-actions">
-        <a href="{% url 'crear_reparacion' %}" class="create-btn">
-            Crear Reparación
-        </a>
-        <a href="{% url 'inicio' %}" class="create-btn">
-            Mi Tablero
-        </a>
-    </div>
+    {% if request.user.is_authenticated %}
+        <div class="dashboard-actions">
+            <a href="{% url 'crear_reparacion' %}" class="create-btn">
+                Crear Reparación
+            </a>
+            <a href="{% url 'inicio' %}" class="create-btn">
+                Mi Tablero
+            </a>
+        </div>
+    {% endif %}
 
     <div class="dashboard">
         {% for reparacion in reparaciones %}
