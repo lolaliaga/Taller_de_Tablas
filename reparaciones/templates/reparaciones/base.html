@@ -23,7 +23,7 @@
                 <a class="nav-button" href="{% url 'registrar' %}">Registrarse</a>
             </div>
         {% endif %}
-        <img src="{% static 'reparaciones/logo_printscren.png' %}" alt="Taller de Tablas" class="header-logo">
+        <img src="{% static 'reparaciones/LogoTT.png' %}" alt="Taller de Tablas" class="header-logo">
         {% if request.user.is_authenticated %}
             <nav class="header-nav">
                 <a class="nav-button" href="{% url 'crear_reparacion' %}">Crear Reparación</a>
