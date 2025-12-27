@@ -10,7 +10,22 @@
 
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+        {{ form.non_field_errors }}
+
+        <label for="{{ form.username.id_for_label }}">Usuario</label>
+        {{ form.username.errors }}
+        {{ form.username }}
+
+        <label for="{{ form.password1.id_for_label }}">{{ form.password1.label }}</label>
+        {{ form.password1.errors }}
+        {{ form.password1 }}
+
+        <label for="{{ form.password2.id_for_label }}">{{ form.password2.label }}</label>
+        {{ form.password2.errors }}
+        {{ form.password2 }}
+        {% if form.password2.help_text %}
+            <small>{{ form.password2.help_text }}</small>
+        {% endif %}
         <button type="submit">Crear cuenta</button>
     </form>
 </div>
