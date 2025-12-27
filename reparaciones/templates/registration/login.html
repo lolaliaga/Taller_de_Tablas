@@ -5,8 +5,6 @@
 
 {% block content %}
 <div class="form-container form-card">
-    <a class="back-link" href="{% url 'inicio' %}" onclick="if (window.history.length > 1) { history.back(); return false; }">Volver atrás</a>
-
     <h2>Ingresar</h2>
 
     {% if form.errors %}
@@ -21,8 +19,13 @@
         <label for="id_username">Usuario</label>
         <input type="text" name="username" id="id_username" required autofocus>
 
-        <label for="id_password">Contraseña</label>
-        <input type="password" name="password" id="id_password" required>
+        <label for="id_password">Repetí tu usuario</label>
+        <div class="password-field">
+            <input type="password" name="password" id="id_password" required>
+            <button type="button" class="password-toggle" aria-label="Mostrar u ocultar">
+                👁️
+            </button>
+        </div>
 
         <div class="remember-me">
             <input type="checkbox" name="remember_me" id="id_remember_me">
@@ -37,4 +40,16 @@
         <a href="{% url 'registrar' %}">Registrarse</a>
     </p>
 </div>
+<script>
+    const passwordInput = document.getElementById("id_password");
+    const toggleButton = document.querySelector(".password-toggle");
+
+    if (passwordInput && toggleButton) {
+        toggleButton.addEventListener("click", () => {
+            const isHidden = passwordInput.type === "password";
+            passwordInput.type = isHidden ? "text" : "password";
+            toggleButton.setAttribute("aria-label", isHidden ? "Ocultar" : "Mostrar");
+        });
+    }
+</script>
 {% endblock %}

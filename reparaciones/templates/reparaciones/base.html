@@ -24,10 +24,12 @@
             </div>
         {% endif %}
         <img src="{% static 'reparaciones/logo_printscren.png' %}" alt="Taller de Tablas" class="header-logo">
-        <nav class="header-nav">
-            <a class="nav-button" href="{% url 'inicio' %}">Mi Tablero</a>
-            <a class="nav-button" href="{% url 'crear_reparacion' %}">Crear reparación</a>
-        </nav>
+        {% if request.user.is_authenticated %}
+            <nav class="header-nav">
+                <a class="nav-button" href="{% url 'crear_reparacion' %}">Crear Reparación</a>
+                <a class="nav-button" href="{% url 'inicio' %}">Mi Tablero</a>
+            </nav>
+        {% endif %}
         <div class="header-socials">
 
             <!-- Instagram -->
