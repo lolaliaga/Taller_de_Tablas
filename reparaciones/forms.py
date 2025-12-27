@@ -15,6 +15,12 @@ class RegistroForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["username"].help_text = ""
+        self.fields["password1"].label = "Repetí tu usuario"
+        self.fields["password1"].help_text = ""
+        self.fields["password1"].widget = forms.TextInput()
+        self.fields["password2"].label = "Confirmación"
+        self.fields["password2"].help_text = "Usamos tu nombre de usuario"
+        self.fields["password2"].widget = forms.TextInput()
 
 
 # =============================
