@@ -66,7 +66,6 @@ class ReparacionForm(forms.ModelForm):
     class Meta:
         model = Reparacion
         fields = [
-            "nombre_cliente",
             "telefono",
             "ubicacion",
             "tipo_equipo",

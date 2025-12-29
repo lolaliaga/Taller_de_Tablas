@@ -54,7 +54,7 @@ class PresupuestoInline(admin.TabularInline):
 class ReparacionAdmin(admin.ModelAdmin):
     list_display = (
         "id",
-        "nombre_cliente",
+        "usuario",
         "telefono",
         "ubicacion",
         "tipo_equipo",
@@ -66,15 +66,15 @@ class ReparacionAdmin(admin.ModelAdmin):
         "ultimo_presupuesto_estado",
         "link_ultimo_presupuesto",
         "fecha_estimada_entrega",
-        "usuario",
         "imagen_link",
         "video_link",
         "created_at",
     )
     list_filter = ('estado', 'tipo_equipo', 'usuario')
-    search_fields = ('nombre_cliente', 'telefono', 'ubicacion', 'tipo_equipo')
+    search_fields = ('usuario__username', 'telefono', 'ubicacion', 'tipo_equipo')
     ordering = ('-id',)
     readonly_fields = ('usuario', 'tiene_video')  # El usuario que creó la reparación no se puede modificar desde el admin
+    raw_id_fields = ("usuario",)
     inlines = (PresupuestoInline,)
 
     def get_queryset(self, request):
@@ -145,7 +145,7 @@ class ReparacionAdmin(admin.ModelAdmin):
 
     fieldsets = (
         (None, {
-            'fields': ('usuario', 'nombre_cliente', 'telefono', 'ubicacion', 'tipo_equipo', 'descripcion', 'imagen', 'estado', 'fecha_estimada_entrega', 'tiene_video')
+            'fields': ('usuario', 'telefono', 'ubicacion', 'tipo_equipo', 'descripcion', 'imagen', 'estado', 'fecha_estimada_entrega', 'tiene_video')
         }),
     )
 
@@ -210,12 +210,17 @@ class ReparacionAdmin(admin.ModelAdmin):
 
     video_link.short_description = "Video"
 
+    def save_model(self, request, obj, form, change):
+        if obj.usuario and not obj.nombre_cliente:
+            obj.nombre_cliente = obj.usuario.username
+        super().save_model(request, obj, form, change)
+
 
 @admin.register(FacturaFinal)
 class FacturaFinalAdmin(admin.ModelAdmin):
     form = FacturaFinalForm
     list_display = ("id", "reparacion", "moneda", "monto_total", "created_at")
-    search_fields = ("reparacion__nombre_cliente", "reparacion__telefono")
+    search_fields = ("reparacion__usuario__username", "reparacion__telefono")
     readonly_fields = ("created_at", "usuario")
 
     def save_model(self, request, obj, form, change):
