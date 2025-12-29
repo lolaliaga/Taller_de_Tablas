@@ -120,7 +120,22 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 # --------------------------------------------------
 # MEDIA + STORAGE  (🔴 FIX REAL ACÁ)
 # --------------------------------------------------
-if DEBUG:
+R2_ACCESS_KEY_ID = os.environ.get("R2_ACCESS_KEY_ID")
+R2_SECRET_ACCESS_KEY = os.environ.get("R2_SECRET_ACCESS_KEY")
+R2_BUCKET_NAME = os.environ.get("R2_BUCKET_NAME")
+R2_ENDPOINT_URL = os.environ.get("R2_ENDPOINT_URL")
+R2_PUBLIC_HOST = os.environ.get("R2_PUBLIC_HOST", "").strip()
+
+USE_R2_STORAGE = all(
+    [
+        R2_ACCESS_KEY_ID,
+        R2_SECRET_ACCESS_KEY,
+        R2_BUCKET_NAME,
+        R2_ENDPOINT_URL,
+    ]
+)
+
+if DEBUG or not USE_R2_STORAGE:
     # ============================
     # LOCAL → filesystem
     # ============================
@@ -144,10 +159,10 @@ else:
         "default": {
             "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
             "OPTIONS": {
-                "access_key": os.environ.get("R2_ACCESS_KEY_ID"),
-                "secret_key": os.environ.get("R2_SECRET_ACCESS_KEY"),
-                "bucket_name": os.environ.get("R2_BUCKET_NAME"),
-                "endpoint_url": os.environ.get("R2_ENDPOINT_URL"),
+                "access_key": R2_ACCESS_KEY_ID,
+                "secret_key": R2_SECRET_ACCESS_KEY,
+                "bucket_name": R2_BUCKET_NAME,
+                "endpoint_url": R2_ENDPOINT_URL,
                 "region_name": "auto",
             },
         },
@@ -156,7 +171,6 @@ else:
         },
     }
 
-    R2_PUBLIC_HOST = os.environ.get("R2_PUBLIC_HOST", "").strip()
     if R2_PUBLIC_HOST:
         AWS_S3_CUSTOM_DOMAIN = R2_PUBLIC_HOST
 
