@@ -33,6 +33,7 @@ class ReparacionForm(forms.ModelForm):
     # Opciones predefinidas
     # -----------------------------
     UBICACION_CHOICES = [
+        ("", "Seleccioná una opción"),
         ("Dina Huapi", "Dina Huapi"),
         ("Zona Este", "Zona Este"),
         ("Centro", "Centro"),
@@ -45,6 +46,7 @@ class ReparacionForm(forms.ModelForm):
     ]
 
     TIPO_EQUIPO_CHOICES = [
+        ("", "Seleccioná una opción"),
         ("Surf", "Surf"),
         ("Kite", "Kite"),
         ("Foil", "Foil"),
@@ -80,6 +82,24 @@ class ReparacionForm(forms.ModelForm):
 
         self.fields["imagen"].required = True
         self.fields["video"].required = False
+        self.fields["ubicacion"].initial = ""
+        self.fields["ubicacion"].required = True
+        self.fields["ubicacion"].widget.attrs.update({"required": "required"})
+        self.fields["tipo_equipo"].initial = ""
+        self.fields["tipo_equipo"].required = True
+        self.fields["tipo_equipo"].widget.attrs.update({"required": "required"})
+
+    def clean_ubicacion(self):
+        ubicacion = self.cleaned_data.get("ubicacion")
+        if not ubicacion:
+            raise forms.ValidationError("Seleccioná una opción.")
+        return ubicacion
+
+    def clean_tipo_equipo(self):
+        tipo_equipo = self.cleaned_data.get("tipo_equipo")
+        if not tipo_equipo:
+            raise forms.ValidationError("Seleccioná una opción.")
+        return tipo_equipo
 
     def clean_video(self):
         video = self.cleaned_data.get("video")
