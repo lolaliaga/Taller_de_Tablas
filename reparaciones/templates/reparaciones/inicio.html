@@ -51,21 +51,39 @@
                     </p>
                 {% endif %}
 
-                {% if reparacion.presupuestos.all|length %}
-                    <div class="presupuesto-box">
-                        <h4>Presupuestos</h4>
-                        <ul class="presupuesto-list">
-                            {% for presupuesto in reparacion.presupuestos.all %}
-                                <li>
-                                    <strong>Estado:</strong> {{ presupuesto.get_estado_display }}
-                                    <span>· {{ presupuesto.fecha_creacion|date:"d/m/Y" }}</span>
-                                    <a href="{% url 'descargar_presupuesto' presupuesto.id %}" class="presupuesto-link">
-                                        📄 Descargar presupuesto
-                                    </a>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
+                {% if reparacion.presupuestos.exists %}
+                    {% with presupuestos=reparacion.presupuestos.all %}
+                        {% with ultimo_presupuesto=presupuestos|first %}
+                            <div class="presupuesto-box">
+                                <h4>Presupuesto</h4>
+                                <ul class="presupuesto-list">
+                                    <li>
+                                        <strong>Estado:</strong> {{ ultimo_presupuesto.get_estado_display }}
+                                        <span>· {{ ultimo_presupuesto.fecha_creacion|date:"d/m/Y" }}</span>
+                                        <a href="{% url 'descargar_presupuesto' ultimo_presupuesto.id %}" class="presupuesto-link">
+                                            📄 Descargar presupuesto
+                                        </a>
+                                    </li>
+                                </ul>
+                                {% if presupuestos|length > 1 %}
+                                    <details class="presupuesto-history">
+                                        <summary>Ver historial ({{ presupuestos|length }})</summary>
+                                        <ul class="presupuesto-list">
+                                            {% for presupuesto in presupuestos %}
+                                                <li>
+                                                    <strong>Estado:</strong> {{ presupuesto.get_estado_display }}
+                                                    <span>· {{ presupuesto.fecha_creacion|date:"d/m/Y" }}</span>
+                                                    <a href="{% url 'descargar_presupuesto' presupuesto.id %}" class="presupuesto-link">
+                                                        📄 Descargar presupuesto
+                                                    </a>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </details>
+                                {% endif %}
+                            </div>
+                        {% endwith %}
+                    {% endwith %}
                 {% endif %}
 
 
