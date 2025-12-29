@@ -66,6 +66,7 @@ def crear_reparacion(request):
         if form.is_valid():
             reparacion = form.save(commit=False)
             reparacion.usuario = request.user
+            reparacion.nombre_cliente = request.user.username
             reparacion.save()
 
             # 👉 volver al dashboard

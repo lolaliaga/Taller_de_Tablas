@@ -11,7 +11,7 @@
             <thead>
                 <tr>
                     <th>Reparación</th>
-                    <th>Cliente</th>
+                    <th>Usuario</th>
                     <th>Estado</th>
                     <th>Presupuesto</th>
                     <th>Factura</th>
@@ -23,7 +23,7 @@
                     {% with ultimo_presupuesto=reparacion.presupuestos_ordenados|first %}
                         <tr>
                             <td>#{{ reparacion.id }} · {{ reparacion.tipo_equipo }}</td>
-                            <td>{{ reparacion.nombre_cliente }}</td>
+                            <td>{% if reparacion.usuario %}{{ reparacion.usuario.username }}{% else %}—{% endif %}</td>
                             <td>
                                 <span class="estado badge {{ reparacion.estado }}">
                                     {{ reparacion.get_estado_display }}

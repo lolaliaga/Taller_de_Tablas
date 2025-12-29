@@ -24,7 +24,7 @@
 
                 <h2>{{ reparacion.tipo_equipo }}</h2>
 
-                <p><strong>Cliente:</strong> {{ reparacion.nombre_cliente }}</p>
+                <p><strong>Usuario:</strong> {% if reparacion.usuario %}{{ reparacion.usuario.username }}{% else %}—{% endif %}</p>
                 <p><strong>Teléfono:</strong> {{ reparacion.telefono }}</p>
                 <p><strong>Ubicación:</strong> {{ reparacion.ubicacion }}</p>
 
