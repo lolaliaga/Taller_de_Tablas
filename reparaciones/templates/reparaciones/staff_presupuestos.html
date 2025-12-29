@@ -1,0 +1,49 @@
+{% extends "reparaciones/base.html" %}
+
+{% block title %}Presupuestos{% endblock %}
+
+{% block content %}
+<section class="dashboard-shell">
+    <a href="{% url 'staff_reparacion_detalle' reparacion.id %}" class="back-link">Volver al detalle</a>
+    <h1 class="page-title">Presupuestos de reparación #{{ reparacion.id }}</h1>
+
+    <div class="table-wrapper">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Estado</th>
+                    <th>Monto</th>
+                    <th>Fecha</th>
+                    <th>Archivo</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for presupuesto in reparacion.presupuestos.all %}
+                    <tr>
+                        <td>#{{ presupuesto.id }}</td>
+                        <td>{{ presupuesto.get_estado_display }}</td>
+                        <td>
+                            {% if presupuesto.monto %}
+                                {{ presupuesto.moneda }} {{ presupuesto.monto }}
+                            {% else %}
+                                —
+                            {% endif %}
+                        </td>
+                        <td>{{ presupuesto.fecha_creacion|date:"d/m/Y" }}</td>
+                        <td>
+                            <a class="nav-button" href="{% url 'descargar_presupuesto' presupuesto.id %}">
+                                Descargar
+                            </a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="5" class="table-empty">No hay presupuestos cargados.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

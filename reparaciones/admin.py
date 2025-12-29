@@ -5,7 +5,8 @@ from django.urls import reverse
 from django.utils.formats import localize
 from django.utils.html import format_html
 
-from .models import Presupuesto, Reparacion
+from .forms import FacturaFinalForm
+from .models import FacturaFinal, Presupuesto, Reparacion
 
 
 class PresupuestoInline(admin.TabularInline):
@@ -59,6 +60,7 @@ class ReparacionAdmin(admin.ModelAdmin):
         "tipo_equipo",
         "estado",
         "presupuesto_resumen",
+        "factura_resumen",
         "presupuestos_count",
         "ultimo_presupuesto_fecha",
         "ultimo_presupuesto_estado",
@@ -125,6 +127,17 @@ class ReparacionAdmin(admin.ModelAdmin):
             resumen = f"{resumen} · {ultimo.moneda} {localize(ultimo.monto)}"
         url = reverse("admin:reparaciones_presupuesto_change", args=[ultimo.pk])
         return format_html('{} · <a href="{}">#{}</a>', resumen, url, ultimo.pk)
+
+    @admin.display(description="Factura final")
+    def factura_resumen(self, obj):
+        factura = getattr(obj, "factura_final", None)
+        if not factura:
+            return "Sin factura"
+        url = reverse("admin:reparaciones_facturafinal_change", args=[factura.pk])
+        resumen = "Factura cargada"
+        if factura.monto_total is not None:
+            resumen = f"{factura.moneda} {localize(factura.monto_total)}"
+        return format_html('{} · <a href="{}">#{}</a>', resumen, url, factura.pk)
     def tiene_video(self, obj):
         return bool(obj.video)
     tiene_video.boolean = True
@@ -196,6 +209,19 @@ class ReparacionAdmin(admin.ModelAdmin):
         return "—"
 
     video_link.short_description = "Video"
+
+
+@admin.register(FacturaFinal)
+class FacturaFinalAdmin(admin.ModelAdmin):
+    form = FacturaFinalForm
+    list_display = ("id", "reparacion", "moneda", "monto_total", "created_at")
+    search_fields = ("reparacion__nombre_cliente", "reparacion__telefono")
+    readonly_fields = ("created_at", "usuario")
+
+    def save_model(self, request, obj, form, change):
+        if not obj.usuario_id:
+            obj.usuario = request.user
+        super().save_model(request, obj, form, change)
 
 
 @admin.register(Presupuesto)
