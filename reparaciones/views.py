@@ -1,3 +1,4 @@
+import mimetypes
 import os
 
 from django.http import FileResponse
@@ -108,11 +109,17 @@ def descargar_presupuesto(request, presupuesto_id):
         messages.error(request, "No tenés permisos para ver este archivo.")
         return redirect("inicio")
     archivo = presupuesto.archivo_presupuesto
-    return FileResponse(
+    filename = os.path.basename(archivo.name)
+    content_type = mimetypes.guess_type(filename)[0] or "application/octet-stream"
+    descargar = request.GET.get("download") == "1"
+    response = FileResponse(
         archivo.open("rb"),
-        as_attachment=True,
-        filename=os.path.basename(archivo.name),
+        as_attachment=descargar,
+        content_type=content_type,
     )
+    disposition = "attachment" if descargar else "inline"
+    response["Content-Disposition"] = f'{disposition}; filename="{filename}"'
+    return response
 
 
 def _staff_required(request, message="No tenés permisos para acceder a esta sección."):
