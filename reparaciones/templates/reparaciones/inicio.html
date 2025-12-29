@@ -60,8 +60,8 @@
                                     <li>
                                         <strong>Estado:</strong> {{ ultimo_presupuesto.get_estado_display }}
                                         <span>· {{ ultimo_presupuesto.fecha_creacion|date:"d/m/Y" }}</span>
-                                        <a href="{% url 'descargar_presupuesto' ultimo_presupuesto.id %}" class="presupuesto-link">
-                                            📄 Descargar presupuesto
+                                        <a href="{% url 'descargar_presupuesto' ultimo_presupuesto.id %}" class="presupuesto-link" target="_blank" rel="noopener noreferrer">
+                                            📄 Ver presupuesto
                                         </a>
                                     </li>
                                 </ul>
@@ -73,8 +73,8 @@
                                                 <li>
                                                     <strong>Estado:</strong> {{ presupuesto.get_estado_display }}
                                                     <span>· {{ presupuesto.fecha_creacion|date:"d/m/Y" }}</span>
-                                                    <a href="{% url 'descargar_presupuesto' presupuesto.id %}" class="presupuesto-link">
-                                                        📄 Descargar presupuesto
+                                                    <a href="{% url 'descargar_presupuesto' presupuesto.id %}" class="presupuesto-link" target="_blank" rel="noopener noreferrer">
+                                                        📄 Ver presupuesto
                                                     </a>
                                                 </li>
                                             {% endfor %}
