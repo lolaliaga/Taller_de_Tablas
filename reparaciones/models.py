@@ -131,6 +131,15 @@ class Presupuesto(models.Model):
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     fecha_envio = models.DateTimeField(blank=True, null=True)
     notas_internas = models.TextField(blank=True)
+    cerrado = models.BooleanField(default=False)
+    aprobado_en = models.DateTimeField(null=True, blank=True)
+    aprobado_por = models.ForeignKey(
+        User,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="presupuestos_aprobados",
+    )
 
     class Meta:
         ordering = ["-fecha_creacion"]

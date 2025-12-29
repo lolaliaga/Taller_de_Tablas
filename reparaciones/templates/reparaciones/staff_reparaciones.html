@@ -31,11 +31,15 @@
                             </td>
                             <td>
                                 {% if ultimo_presupuesto %}
-                                    {{ ultimo_presupuesto.get_estado_display }}
+                                    {% if ultimo_presupuesto.estado == "aprobado" %}
+                                        <span class="estado badge aprobado">Aprobado</span>
+                                    {% else %}
+                                        {{ ultimo_presupuesto.get_estado_display }}
+                                    {% endif %}
                                     {% if ultimo_presupuesto.monto %}
                                         · {{ ultimo_presupuesto.moneda }} {{ ultimo_presupuesto.monto }}
                                     {% endif %}
-                                    · #{{ ultimo_presupuesto.id }}
+                                    · <a href="{% url 'staff_presupuestos' reparacion.id %}">#{{ ultimo_presupuesto.id }}</a>
                                 {% else %}
                                     Sin presupuesto
                                 {% endif %}

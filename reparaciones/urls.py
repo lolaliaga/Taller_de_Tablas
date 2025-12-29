@@ -43,6 +43,11 @@ urlpatterns = [
         name='descargar_presupuesto',
     ),
     path(
+        'presupuestos/<int:presupuesto_id>/aceptar/',
+        views.aceptar_presupuesto,
+        name='aceptar_presupuesto',
+    ),
+    path(
         'reparaciones/<int:reparacion_id>/factura-final/descargar/',
         views.descargar_factura_final,
         name='descargar_factura_final',
