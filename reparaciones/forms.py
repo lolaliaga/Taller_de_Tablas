@@ -1,7 +1,8 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import Reparacion
+from .models import FacturaFinal, Presupuesto, Reparacion
+import os
 
 # =============================
 # Formulario de registro
@@ -95,3 +96,53 @@ class ReparacionForm(forms.ModelForm):
             )
 
         return video
+
+
+class PresupuestoForm(forms.ModelForm):
+
+    class Meta:
+        model = Presupuesto
+        fields = [
+            "archivo_presupuesto",
+            "monto",
+            "moneda",
+            "notas_internas",
+        ]
+
+
+class FacturaFinalForm(forms.ModelForm):
+    class Meta:
+        model = FacturaFinal
+        fields = [
+            "monto_total",
+            "moneda",
+            "archivo_factura",
+            "link_factura",
+            "notas_internas",
+        ]
+        labels = {
+            "monto_total": "Monto total",
+            "moneda": "Moneda",
+            "archivo_factura": "Archivo de factura (PDF o imagen)",
+            "link_factura": "o Link de factura",
+            "notas_internas": "Notas internas",
+        }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        archivo = cleaned_data.get("archivo_factura")
+        link = cleaned_data.get("link_factura")
+
+        if not archivo and not link:
+            raise forms.ValidationError(
+                "Tenés que cargar un archivo o pegar un link para la factura final."
+            )
+
+        if archivo:
+            ext = os.path.splitext(archivo.name)[1].lower().lstrip(".")
+            if ext not in {"pdf", "jpg", "jpeg", "png"}:
+                self.add_error(
+                    "archivo_factura",
+                    "Formato inválido. Usá PDF o imagen (JPG/PNG).",
+                )
+        return cleaned_data

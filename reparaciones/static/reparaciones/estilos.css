@@ -309,6 +309,30 @@ button:hover,
     text-align: center;
 }
 
+.messages {
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.message {
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 2px solid #000;
+    font-weight: 600;
+    background: #fff;
+    color: #000;
+}
+
+.message.success {
+    border-color: #2ecd46;
+}
+
+.message.error {
+    border-color: #b40000;
+}
+
 /* ========================
    FORM
 ======================== */
@@ -516,6 +540,60 @@ textarea {
   color: #4b75d0;
   font-weight: 500;
   text-decoration: none;
+}
+
+.factura-final-box {
+  background: #f8fafc;
+  border: 1px solid #000000;
+  border-radius: 8px;
+  padding: 10px;
+  margin-top: 10px;
+  font-size: 0.85rem;
+}
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  background: #fff;
+  color: #000;
+  border: 2px solid #000;
+}
+
+.table th,
+.table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #000;
+  text-align: left;
+  vertical-align: top;
+}
+
+.table th {
+  background: #f1f1f1;
+  font-weight: 700;
+}
+
+.table-empty {
+  text-align: center;
+  font-weight: 600;
+}
+
+.table-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 12px 0;
 }
 
 .btn-aceptar-presupuesto {

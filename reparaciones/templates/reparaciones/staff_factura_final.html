@@ -1,0 +1,28 @@
+{% extends "reparaciones/base.html" %}
+
+{% block title %}Factura final{% endblock %}
+
+{% block content %}
+<section class="dashboard-shell">
+    <a href="{% url 'staff_finalizados' %}" class="back-link">Volver a finalizados</a>
+    <div class="form-container">
+        <h2>Factura final</h2>
+        <p class="form-description">Cargá la factura final para certificar la finalización del trabajo.</p>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            {% for field in form %}
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <div class="error-message">{{ field.errors|striptags }}</div>
+                {% endif %}
+            {% endfor %}
+            <div class="form-actions">
+                <button type="submit" class="nav-button">Guardar factura</button>
+                <a class="back-link" href="{% url 'staff_finalizados' %}">Volver a finalizados</a>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}

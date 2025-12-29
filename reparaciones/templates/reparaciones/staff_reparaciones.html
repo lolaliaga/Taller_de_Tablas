@@ -1,0 +1,77 @@
+{% extends "reparaciones/base.html" %}
+
+{% block title %}Reparaciones en curso{% endblock %}
+
+{% block content %}
+<section class="dashboard-shell">
+    <h1 class="page-title">Reparaciones en curso</h1>
+
+    <div class="table-wrapper">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Reparación</th>
+                    <th>Cliente</th>
+                    <th>Estado</th>
+                    <th>Presupuesto</th>
+                    <th>Factura</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for reparacion in reparaciones %}
+                    {% with ultimo_presupuesto=reparacion.presupuestos_ordenados|first %}
+                        <tr>
+                            <td>#{{ reparacion.id }} · {{ reparacion.tipo_equipo }}</td>
+                            <td>{{ reparacion.nombre_cliente }}</td>
+                            <td>
+                                <span class="estado badge {{ reparacion.estado }}">
+                                    {{ reparacion.get_estado_display }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if ultimo_presupuesto %}
+                                    {{ ultimo_presupuesto.get_estado_display }}
+                                    {% if ultimo_presupuesto.monto %}
+                                        · {{ ultimo_presupuesto.moneda }} {{ ultimo_presupuesto.monto }}
+                                    {% endif %}
+                                    · #{{ ultimo_presupuesto.id }}
+                                {% else %}
+                                    Sin presupuesto
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if reparacion.factura_final_safe %}
+                                    Factura cargada · #{{ reparacion.factura_final_safe.id }}
+                                {% else %}
+                                    Sin factura
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="table-actions">
+                                    <a class="nav-button" href="{% url 'staff_reparacion_detalle' reparacion.id %}">Ver detalle</a>
+                                    <form method="post" action="{% url 'staff_finalizar_reparacion' reparacion.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="nav-button" title="Marca la reparación como finalizada y permite cargar la factura final.">
+                                            Finalizar trabajo
+                                        </button>
+                                    </form>
+                                    {% if ultimo_presupuesto %}
+                                        <a class="nav-button" href="{% url 'staff_presupuestos' reparacion.id %}">Ver presupuestos</a>
+                                    {% else %}
+                                        <a class="nav-button" href="{% url 'staff_cargar_presupuesto' reparacion.id %}">Cargar presupuesto</a>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                    {% endwith %}
+                {% empty %}
+                    <tr>
+                        <td colspan="6" class="table-empty">No hay reparaciones en curso.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

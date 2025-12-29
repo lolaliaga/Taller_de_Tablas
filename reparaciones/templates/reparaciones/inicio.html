@@ -86,6 +86,19 @@
                     {% endwith %}
                 {% endif %}
 
+                {% if reparacion.estado == "finalizado" %}
+                    <div class="factura-final-box">
+                        <h4>Factura final</h4>
+                        {% if reparacion.factura_final_safe %}
+                            <p>Factura disponible</p>
+                            <a href="{% url 'descargar_factura_final' reparacion.id %}" class="presupuesto-link">
+                                Descargar
+                            </a>
+                        {% else %}
+                            <p>La factura final todavía no fue cargada.</p>
+                        {% endif %}
+                    </div>
+                {% endif %}
 
                 <p><strong>Descripción:</strong> {{ reparacion.descripcion }}</p>
 

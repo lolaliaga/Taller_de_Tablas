@@ -1,0 +1,50 @@
+{% extends "reparaciones/base.html" %}
+
+{% block title %}Detalle de reparación{% endblock %}
+
+{% block content %}
+<section class="dashboard-shell">
+    <a href="{% url 'staff_reparaciones' %}" class="back-link">Volver a reparaciones</a>
+    <h1 class="page-title">Reparación #{{ reparacion.id }}</h1>
+
+    <div class="card">
+        <h2>{{ reparacion.tipo_equipo }}</h2>
+        <p><strong>Cliente:</strong> {{ reparacion.nombre_cliente }}</p>
+        <p><strong>Teléfono:</strong> {{ reparacion.telefono }}</p>
+        <p><strong>Ubicación:</strong> {{ reparacion.ubicacion }}</p>
+        <p>
+            <strong>Estado:</strong>
+            <span class="estado badge {{ reparacion.estado }}">{{ reparacion.get_estado_display }}</span>
+        </p>
+
+        <div class="card-actions">
+            {% if reparacion.estado != "finalizado" %}
+                <form method="post" action="{% url 'staff_finalizar_reparacion' reparacion.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="nav-button" title="Marca la reparación como finalizada y permite cargar la factura final.">
+                        Finalizar trabajo
+                    </button>
+                </form>
+            {% endif %}
+            {% if reparacion.presupuestos_ordenados|length %}
+                <a class="nav-button" href="{% url 'staff_presupuestos' reparacion.id %}">Ver presupuestos</a>
+            {% else %}
+                <a class="nav-button" href="{% url 'staff_cargar_presupuesto' reparacion.id %}">Cargar presupuesto</a>
+            {% endif %}
+        </div>
+
+        <p><strong>Descripción:</strong> {{ reparacion.descripcion }}</p>
+    </div>
+
+    <div class="card">
+        <h3>Factura final</h3>
+        {% if reparacion.factura_final_safe %}
+            <p>Factura cargada</p>
+            <a class="nav-button" href="{% url 'descargar_factura_final' reparacion.id %}">Descargar factura</a>
+        {% else %}
+            <p>Sin factura</p>
+            <a class="nav-button" href="{% url 'staff_factura_final' reparacion.id %}">Cargar factura</a>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
