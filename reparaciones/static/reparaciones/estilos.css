@@ -400,6 +400,25 @@ textarea {
     gap: 8px;
 }
 
+.remember-row {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.remember-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    max-width: 100%;
+}
+
+.remember-text {
+    white-space: nowrap;
+    overflow: visible;
+}
+
 .error-message {
     color: #b40000;
     margin-bottom: 10px;
@@ -449,6 +468,15 @@ textarea {
         flex-direction: column;
         align-items: center;
         gap: 10px;
+    }
+
+    .remember-row {
+        justify-content: flex-start;
+        padding-left: 6px;
+    }
+
+    .remember-label {
+        justify-content: flex-start;
     }
 
     .header-user {
