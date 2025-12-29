@@ -1,13 +1,18 @@
 import mimetypes
 import os
 
-from django.http import FileResponse
+from django.conf import settings
+from django.core.mail import send_mail
+from django.http import FileResponse, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404, render, redirect
+from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 from django.contrib.auth.views import LoginView
 from django.contrib import messages
 import logging
+from django.db import transaction
+from django.utils import timezone
 
 from .forms import FacturaFinalForm, PresupuestoForm, RegistroForm, ReparacionForm
 from django.db.models import Prefetch
@@ -15,6 +20,44 @@ from django.db.models import Prefetch
 from .models import FacturaFinal, Presupuesto, Reparacion
 
 logger = logging.getLogger(__name__)
+
+
+def _notify_taller_presupuesto_aprobado(request, presupuesto):
+    destinatario = os.environ.get("TALLER_NOTIFY_EMAIL", "").strip()
+    if not destinatario:
+        logger.info("TALLER_NOTIFY_EMAIL no configurado; se omite el envío.")
+        return
+
+    usuario = presupuesto.reparacion.usuario
+    monto = ""
+    if presupuesto.monto is not None:
+        monto = f"{presupuesto.moneda} {presupuesto.monto}"
+    admin_url = request.build_absolute_uri(
+        reverse("admin:reparaciones_presupuesto_change", args=[presupuesto.pk])
+    )
+    subject = f"✅ Presupuesto aprobado — Reparación #{presupuesto.reparacion_id}"
+    body = "\n".join(
+        [
+            f"Usuario: {usuario.username if usuario else '—'}",
+            f"Reparación: #{presupuesto.reparacion_id}",
+            f"Presupuesto: #{presupuesto.pk}",
+            f"Monto: {monto or '—'}",
+            f"Admin: {admin_url}",
+        ]
+    )
+    send_mail(
+        subject=subject,
+        message=body,
+        from_email=getattr(settings, "DEFAULT_FROM_EMAIL", "no-reply@example.com"),
+        recipient_list=[destinatario],
+        fail_silently=True,
+    )
+    _notify_taller_proveedor_externo(presupuesto)
+
+
+def _notify_taller_proveedor_externo(presupuesto):
+    """Hook para integrar WhatsApp/SMS en el futuro."""
+    return
 
 # -----------------------------
 # Dashboard / Inicio
@@ -34,6 +77,35 @@ def inicio(request):
         "reparaciones/inicio.html",
         {"reparaciones": reparaciones}
     )
+
+
+@login_required
+def aceptar_presupuesto(request, presupuesto_id):
+    if request.method != "POST":
+        return HttpResponseNotAllowed(["POST"])
+
+    presupuesto = get_object_or_404(Presupuesto, pk=presupuesto_id)
+    if presupuesto.reparacion.usuario != request.user:
+        messages.error(request, "No tenés permisos para aprobar este presupuesto.")
+        return redirect("inicio")
+
+    if presupuesto.estado != "enviado":
+        messages.error(request, "Solo podés aceptar presupuestos enviados.")
+        return redirect("inicio")
+
+    with transaction.atomic():
+        presupuesto.estado = "aprobado"
+        presupuesto.cerrado = True
+        presupuesto.aprobado_en = timezone.now()
+        presupuesto.aprobado_por = request.user
+        presupuesto.save(update_fields=["estado", "cerrado", "aprobado_en", "aprobado_por"])
+        reparacion = presupuesto.reparacion
+        reparacion.estado = "en_proceso"
+        reparacion.save(update_fields=["estado"])
+
+    messages.success(request, "✅ Presupuesto aprobado. Vamos a comenzar la reparación.")
+    _notify_taller_presupuesto_aprobado(request, presupuesto)
+    return redirect("inicio")
 
 # -----------------------------
 # Registro de usuario

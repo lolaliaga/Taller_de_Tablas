@@ -65,6 +65,15 @@
                                         </a>
                                     </li>
                                 </ul>
+                                {% if request.user.is_authenticated and reparacion.usuario == request.user and ultimo_presupuesto.estado == "enviado" %}
+                                    <form method="post" action="{% url 'aceptar_presupuesto' ultimo_presupuesto.id %}" class="presupuesto-approve-form">
+                                        {% csrf_token %}
+                                        <button type="submit" class="nav-button">Aceptar presupuesto</button>
+                                        <p class="legal-text">
+                                            Al aceptar el presupuesto, autorizás el inicio de la reparación. El trabajo comenzará una vez aceptado.
+                                        </p>
+                                    </form>
+                                {% endif %}
                                 {% if presupuestos|length > 1 %}
                                     <details class="presupuesto-history">
                                         <summary>Ver historial ({{ presupuestos|length }})</summary>

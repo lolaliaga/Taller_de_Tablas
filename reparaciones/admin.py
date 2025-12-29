@@ -263,6 +263,16 @@ class PresupuestoAdmin(admin.ModelAdmin):
         "marcar_rechazado",
     ]
 
+    def get_readonly_fields(self, request, obj=None):
+        if obj and obj.cerrado:
+            return [field.name for field in obj._meta.fields]
+        return super().get_readonly_fields(request, obj)
+
+    def has_delete_permission(self, request, obj=None):
+        if obj and obj.cerrado:
+            return False
+        return super().has_delete_permission(request, obj)
+
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)
         if obj.estado == "enviado":
