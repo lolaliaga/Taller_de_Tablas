@@ -77,7 +77,7 @@ img {
 }
 
 .header-logo {
-    max-width: 312px;
+    max-width: 380px;
     width: 100%;
     height: auto;
 }
@@ -128,8 +128,9 @@ img {
 }
 
 .header-social img {
-    width: 28px;
-    height: 28px;
+    display: block;
+    width: 30px;   /* ajustable */
+    height: 30px;  /* ajustable */
 }
 
 /* ========================
@@ -405,7 +406,7 @@ textarea {
     }
 
     .header-logo {
-        max-width: 260px;
+        max-width: 380px;
     }
 
     .header-user,
