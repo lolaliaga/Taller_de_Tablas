@@ -76,6 +76,11 @@ class Reparacion(models.Model):
 
 
 class Presupuesto(models.Model):
+    MONEDA_CHOICES = [
+        ("ARS", "ARS"),
+        ("USD", "USD"),
+    ]
+
     usuario = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
@@ -96,6 +101,18 @@ class Presupuesto(models.Model):
         max_length=20,
         choices=ESTADOS_PRESUPUESTO,
         default="pendiente",
+    )
+    monto = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        help_text="Monto final del presupuesto",
+    )
+    moneda = models.CharField(
+        max_length=3,
+        choices=MONEDA_CHOICES,
+        default="ARS",
     )
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     fecha_envio = models.DateTimeField(blank=True, null=True)

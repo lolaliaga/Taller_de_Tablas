@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.db import transaction
 from django.db.models import Count, Max, Prefetch
 from django.urls import reverse
+from django.utils.formats import localize
 from django.utils.html import format_html
 
 from .models import Presupuesto, Reparacion
@@ -13,6 +14,8 @@ class PresupuestoInline(admin.TabularInline):
     fields = (
         "archivo_presupuesto",
         "estado",
+        "monto",
+        "moneda",
         "fecha_creacion",
         "fecha_envio",
         "usuario",
@@ -22,6 +25,8 @@ class PresupuestoInline(admin.TabularInline):
     readonly_fields = (
         "archivo_presupuesto",
         "estado",
+        "monto",
+        "moneda",
         "fecha_creacion",
         "fecha_envio",
         "usuario",
@@ -53,6 +58,7 @@ class ReparacionAdmin(admin.ModelAdmin):
         "ubicacion",
         "tipo_equipo",
         "estado",
+        "presupuesto_resumen",
         "presupuestos_count",
         "ultimo_presupuesto_fecha",
         "ultimo_presupuesto_estado",
@@ -107,6 +113,18 @@ class ReparacionAdmin(admin.ModelAdmin):
         if presupuestos:
             return presupuestos[0]
         return None
+
+    @admin.display(description="Presupuesto")
+    def presupuesto_resumen(self, obj):
+        ultimo = self._get_ultimo_presupuesto(obj)
+        if not ultimo:
+            return "Sin presupuesto"
+        estado = ultimo.get_estado_display() if hasattr(ultimo, "get_estado_display") else ultimo.estado
+        resumen = estado
+        if ultimo.monto is not None:
+            resumen = f"{resumen} · {ultimo.moneda} {localize(ultimo.monto)}"
+        url = reverse("admin:reparaciones_presupuesto_change", args=[ultimo.pk])
+        return format_html('{} · <a href="{}">#{}</a>', resumen, url, ultimo.pk)
     def tiene_video(self, obj):
         return bool(obj.video)
     tiene_video.boolean = True
@@ -187,9 +205,21 @@ class PresupuestoAdmin(admin.ModelAdmin):
         "reparacion",
         "usuario",
         "estado",
+        "monto",
+        "moneda",
         "fecha_creacion",
         "fecha_envio",
         "archivo_link",
+        "notas_internas",
+    )
+    fields = (
+        "reparacion",
+        "usuario",
+        "estado",
+        "monto",
+        "moneda",
+        "archivo_presupuesto",
+        "fecha_envio",
         "notas_internas",
     )
     list_filter = ("estado", "fecha_creacion", "reparacion", "usuario")

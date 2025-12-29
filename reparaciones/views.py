@@ -8,6 +8,8 @@ from django.contrib.auth.views import LoginView
 import logging
 
 from .forms import RegistroForm, ReparacionForm
+from django.db.models import Prefetch
+
 from .models import Presupuesto, Reparacion
 
 logger = logging.getLogger(__name__)
@@ -19,7 +21,9 @@ logger = logging.getLogger(__name__)
 def inicio(request):
     reparaciones = Reparacion.objects.filter(
         usuario=request.user
-    ).prefetch_related("presupuestos").order_by("-created_at")
+    ).prefetch_related(
+        Prefetch("presupuestos", queryset=Presupuesto.objects.order_by("-fecha_creacion"))
+    ).order_by("-created_at")
 
     return render(
         request,
